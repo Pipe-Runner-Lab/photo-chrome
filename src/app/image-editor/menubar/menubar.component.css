@@ -1,0 +1,20 @@
+.menubar-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid rgba(57, 67, 78, 0.78);
+  margin: 0px 16px 0px 16px;
+}
+
+.project-name-wrapper {
+  margin: 8px 0px 8px 0px;
+  width: 15vw;
+}
+
+.spacer {
+  width: 30vw;
+}
+
+.button-panel-wrapper {
+}

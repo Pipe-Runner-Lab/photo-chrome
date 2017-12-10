@@ -1,0 +1,23 @@
+.editor-container {
+  height: auto;
+}
+
+.work-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 16px 16px 16px 16px;
+}
+
+.image-picker-container {
+  margin: 0px 32px 0px 0px;
+}
+
+.canvas-container {
+  padding: 16px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 16px 0px, rgba(0, 0, 0, 0.19) 0px 6px 20px 0px;
+}
+
+.toolbar-container {
+  margin: 0px 0px 0px 32px;
+}

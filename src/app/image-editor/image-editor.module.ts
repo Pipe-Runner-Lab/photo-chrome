@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import {MatInputModule,MatButtonModule,MatIconModule} from '@angular/material';
 
 import { CanvasComponent } from './canvas/canvas.component';
 import { ImageEditorComponent } from './image-editor.component';
@@ -10,9 +10,13 @@ import { MenubarComponent } from './menubar/menubar.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    MatInputModule,
+    MatButtonModule
   ],
   declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent],
   exports:[ImageEditorComponent]
 })
-export class ImageEditorModule { }
+export class ImageEditorModule {
+  
+}
