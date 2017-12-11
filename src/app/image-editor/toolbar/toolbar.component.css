@@ -1,0 +1,29 @@
+.toolbar-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 4px;
+  border-bottom: 1px solid #dddbdb;
+}
+
+.icons {
+  color: #dddbdb;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.main-tool-slider > * + * {
+  margin: 16px 15px 0px 0px;
+}
+
+.main-tool-slider button:nth-child(3n + 1) {
+  margin: 16px 15px 0px 15px;
+}

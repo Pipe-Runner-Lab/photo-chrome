@@ -3,6 +3,7 @@
 }
 
 .work-panel {
+  height: auto;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -10,7 +11,10 @@
 }
 
 .image-picker-container {
-  margin: 0px 32px 0px 0px;
+  margin: 64px 0px 64px 0px;
+  background: #222222;
+  min-width: 200px;
+  max-width: 200px;
 }
 
 .canvas-container {
@@ -19,5 +23,8 @@
 }
 
 .toolbar-container {
-  margin: 0px 0px 0px 32px;
+  margin: 64px 0px 64px 0px;
+  background: #222222;
+  min-width: 200px;
+  max-width: 200px;
 }

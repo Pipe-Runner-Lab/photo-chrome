@@ -8,6 +8,8 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ImagePickerComponent } from './image-picker/image-picker.component';
 import { MenubarComponent } from './menubar/menubar.component';
 
+import { UtilServiceService } from './util-service.service'
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,7 +17,8 @@ import { MenubarComponent } from './menubar/menubar.component';
     MatButtonModule
   ],
   declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent],
-  exports:[ImageEditorComponent]
+  exports:[ImageEditorComponent],
+  providers:[UtilServiceService]
 })
 export class ImageEditorModule {
   

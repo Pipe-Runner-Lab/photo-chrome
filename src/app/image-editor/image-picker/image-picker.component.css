@@ -1,0 +1,38 @@
+.image-picker-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 4px;
+  border-bottom: 1px solid #dddbdb;
+}
+
+.icons {
+  color: #dddbdb;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.photo-slider {
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.thumbnail {
+  width: calc(100% - 16px);
+  height: auto;
+  margin: 0px 8px 8px 8px;
+}
+
+.thumbnail:hover {
+  cursor: pointer;
+}
