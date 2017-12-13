@@ -8,7 +8,7 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { ImagePickerComponent } from './image-picker/image-picker.component';
 import { MenubarComponent } from './menubar/menubar.component';
 
-import { UtilServiceService } from './util-service.service'
+import { UtilService } from './util.service'
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { UtilServiceService } from './util-service.service'
   ],
   declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent],
   exports:[ImageEditorComponent],
-  providers:[UtilServiceService]
+  providers:[UtilService]
 })
 export class ImageEditorModule {
   

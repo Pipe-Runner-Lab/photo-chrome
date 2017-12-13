@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // import {CanvasComponent} from '../canvas/canvas.component'
+import { UtilService } from '../util.service';
 
 @Component({
   selector: 'app-image-picker',
@@ -16,14 +17,14 @@ export class ImagePickerComponent implements OnInit {
     this.fileInputElement.click();
   }
 
-  onUpload(event):void {
+  onUpload(event:any):void {
     if (event.target.files) {
 
       var reader = new FileReader();
 
       reader.onload = (event) => {
         this.fileUrlList = [...this.fileUrlList,event.target['result']];
-        // console.log(this.fileUrlList);
+
       }
 
       for( let i = 0, file; file = event.target.files[i]; i++ ){
@@ -32,15 +33,21 @@ export class ImagePickerComponent implements OnInit {
     }
   }
 
+  onClearByIndex(indexToRemove:number):void{
+    this.fileUrlList = this.fileUrlList.filter(
+      (url,index) => index !== indexToRemove
+    )
+  }
+
   onClearAll(){
     this.fileUrlList = [];
   }
 
-  addImageOnCanvas(url){
-    // this.canvasComponent.addImageOnCanvas(url)
+  addImageOnCanvas(url:string):void{
+    this.utilService.addImageToCanvas(url);
   }
 
-  constructor( ) { }
+  constructor(private utilService: UtilService ) { }
 
   ngOnInit() {
     this.fileInputElement = document.getElementById('upload-file-input');

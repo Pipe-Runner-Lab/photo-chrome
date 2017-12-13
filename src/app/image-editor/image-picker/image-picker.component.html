@@ -5,10 +5,11 @@
     </button>
     <button mat-icon-button><i class="material-icons icons">photo_size_select_small</i></button>
     <div class="spacer"></div>
-    <button mat-icon-button><i class="material-icons icons">delete_forever</i></button>
     <button mat-icon-button (click)="onClearAll()"><i class="material-icons icons">clear</i></button>
   </div>
   <div class="photo-slider">
-    <img class="thumbnail" *ngFor="let url of fileUrlList" [src]="url" (click)="addImageOnCanvas(url);" />
+    <div *ngFor="let url of fileUrlList" class="thumbnail-wrapper">
+      <img [src]="url" (click)="addImageOnCanvas(url);" class="thumbnail" />
+    </div>
   </div>
 </div>
