@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-// import {CanvasComponent} from '../canvas/canvas.component'
 import { UtilService } from '../util.service';
 
 @Component({
@@ -28,6 +27,7 @@ export class ImagePickerComponent implements OnInit {
       }
 
       for( let i = 0, file; file = event.target.files[i]; i++ ){
+        // unable to load multiple files.. probably getting re rendered
         reader.readAsDataURL(file)
       }
     }

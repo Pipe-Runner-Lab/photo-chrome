@@ -11,6 +11,20 @@ export class UtilService {
     this.addImageToCanvasSource.next(url)
   }
 
+  // --------------------- Add Text to Canvas -------------------------------
+  private addTextToCanvasSource = new Subject<any>();
+  addTextToCanvas$ = this.addTextToCanvasSource.asObservable();
+  addTextToCanvas = (textObj) => {
+    this.addTextToCanvasSource.next(textObj)
+  }
+
+  // --------------------- On Change Tool type ------------------------------
+  private changeToolTypeSource = new Subject<any>();
+  changeToolType$ = this.changeToolTypeSource.asObservable();
+  changeToolType = (toolType) => {
+    this.changeToolTypeSource.next(toolType)
+  }
+
   // --------------------- Crop Image ---------------------------------------
 
 }

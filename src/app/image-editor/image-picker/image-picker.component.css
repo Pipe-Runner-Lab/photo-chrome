@@ -1,10 +1,13 @@
 .image-picker-wrapper {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .icon-panel {
-  height: 40px;
+  height: 5%;
+  min-height: 40px;
+  width: calc(100% - 8px);
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -22,7 +25,7 @@
 }
 
 .photo-slider {
-  height: calc(600px - 53px);
+  height: 95%;
   position: relative;
   z-index: 9;
   display: flex;
@@ -35,7 +38,6 @@
   position: relative;
   z-index: 8;
   width: calc(100%-16px);
-  height: auto;
   margin: 0px 8px 8px 8px;
   border: 1px solid #8d8c8c;
 }
@@ -46,7 +48,6 @@
 
 .thumbnail {
   width: 100%;
-  height: auto;
 }
 
 .thumbnail:hover {

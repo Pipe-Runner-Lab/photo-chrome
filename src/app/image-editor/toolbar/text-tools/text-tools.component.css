@@ -1,0 +1,53 @@
+.icons {
+  color: #dddbdb;
+}
+
+.text-field-container {
+  width: 100%;
+  margin: 12px 0px 0px 0px;
+}
+
+.text-field {
+  width: calc(100% - 16px);
+  margin: 0px 8px 0px 8px;
+  color: #eeeeee;
+}
+
+.font-style-container {
+  margin: 16px 0px 0px 0px;
+}
+
+.font-size-slider-container {
+  width: 100%;
+  margin: 16px 0px 0px 0px;
+}
+
+.font-size-slider {
+  width: calc(100% - 16px);
+  margin: 0px 8px 0px 8px;
+}
+
+.color-alpha-picker-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.alpha-slider-wrapper {
+  flex: 1;
+  margin: 0px 8px 0px 0px;
+}
+
+.alpha-slider {
+  width: 100%;
+}
+
+.confirm-button-container {
+  width: 100%;
+  margin: 16px 0px 0px 0px;
+}
+
+.confirm-button {
+  width: calc(100% - 16px);
+  margin: 0px 8px 0px 8px;
+}

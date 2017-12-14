@@ -1,15 +1,12 @@
 <div class="toolbar-wrapper">
   <div class="icon-panel">
-    <button mat-icon-button><i class="material-icons icons">arrow_back</i></button>
+    <button mat-icon-button *ngIf="selectedToolType!=='MAIN'" (click)="onChangeToolType('MAIN')"><i class="material-icons icons">arrow_back</i></button>
     <div class="spacer"></div>
     <button mat-icon-button><i class="material-icons icons">undo</i></button>
     <button mat-icon-button><i class="material-icons icons">redo</i></button>
   </div>
   <div class="main-tool-slider">
-    <button mat-icon-button><i class="material-icons icons">crop</i></button>
-    <button mat-icon-button><i class="material-icons icons">zoom_out_map</i></button>
-    <button mat-icon-button><i class="material-icons icons">zoom_in</i></button>
-    <button mat-icon-button><i class="material-icons icons">text_fields</i></button>
-    <button mat-icon-button><i class="material-icons icons">photo_filter</i></button>
+    <app-main-tools *ngIf="selectedToolType==='MAIN'"></app-main-tools>
+    <app-text-tools *ngIf="selectedToolType==='TEXT'"></app-text-tools>
   </div>
 </div>

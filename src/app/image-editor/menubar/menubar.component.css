@@ -5,6 +5,8 @@
   align-items: center;
   border-bottom: 1px solid rgba(57, 67, 78, 0.78);
   margin: 0px 16px 0px 16px;
+  width: calc(100vw - 32px);
+  height: 100%;
 }
 
 .project-name-wrapper {

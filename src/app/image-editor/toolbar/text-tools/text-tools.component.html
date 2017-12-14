@@ -1,0 +1,33 @@
+<div class="text-field-container">
+  <mat-form-field class="examdivle-full-width text-field" color="accent">
+    <input matInput type="text" placeholder="Text" [(ngModel)]="text">
+  </mat-form-field>
+</div>
+<mat-grid-list class="font-style-container" cols="4" rowHeight="52px">
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">format_bold</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">format_italic</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">format_underlined</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">strikethrough_s</i></button>
+  </mat-grid-tile>
+</mat-grid-list>
+<div class="font-size-slider-container">
+  <mat-slider class="font-size-slider"></mat-slider>
+</div>
+<div class="color-alpha-picker-container">
+  <button mat-icon-button [(colorPicker)]="color" [cpPosition]="'bottom'" [style.color]="color" [cpPositionOffset]="'50%'"
+    [cpPositionRelativeToArrow]="true" [cpCancelButton]="true"><i class="material-icons icons">color_lens</i>
+  </button>
+  <div class="alpha-slider-wrapper">
+    <mat-slider class="alpha-slider"></mat-slider>
+  </div>
+</div>
+<div class="confirm-button-container">
+  <button mat-raised-button color="accent" class="confirm-button" (click)="addTextToCanvas()">ADD</button>
+</div>

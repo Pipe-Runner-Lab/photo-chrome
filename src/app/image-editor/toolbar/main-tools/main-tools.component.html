@@ -1,0 +1,17 @@
+<mat-grid-list cols="3" rowHeight="52px">
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">crop</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">zoom_out_map</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">zoom_in</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile (click)="onChangeToolType('TEXT')">
+    <button mat-icon-button><i class="material-icons icons">text_fields</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button><i class="material-icons icons">photo_filter</i></button>
+  </mat-grid-tile>
+</mat-grid-list>

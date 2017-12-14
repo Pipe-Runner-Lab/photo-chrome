@@ -1,9 +1,10 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import 'fabric';
 import {UtilService} from '../util.service'
 import { Subscription }   from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/throttleTime';
 
 declare const fabric: any;
 
@@ -36,8 +37,8 @@ export class CanvasComponent implements OnInit {
   private textString: string;
   private url: string = '';
   private size: any = {
-    height: window.innerHeight - 120,
-    width: Math.round((window.innerHeight - 120) * this.aspectRatioList[1]),
+    height: Math.round(window.innerHeight - 150),
+    width: Math.round((window.innerHeight - 150) * this.aspectRatioList[1]),
   };
 
   private json: any;
@@ -49,9 +50,10 @@ export class CanvasComponent implements OnInit {
 
   // ------------------------------- subscribtion ------------------------------
   private addImageSubscription:Subscription;
+  private addTextSubscription:Subscription;
   private windowResizeSubscription:Subscription;
 
-  // ------------------------------- image -------------------------------------  
+  // ------------------------------- image adding ------------------------------ 
 
   addImageOnCanvas(url:string):void{
     console.log(url);
@@ -65,16 +67,85 @@ export class CanvasComponent implements OnInit {
           cornersize: 10,
           hasRotatingPoint: true
         });
-        // image.setWidth(this.size.width);
-        // image.setHeight(this.size.height);
-        // this.extend(image, this.randomId());
+        // image.setWidth(200);
+        // image.setHeight(200);
+        this.extend(image, this.randomId());
         this.canvas.add(image);
         this.selectItemAfterAdded(image);
       });
     }
   }
 
+  // ------------------------------- image selection ----------------------------
+
+  cleanSelect() {
+    this.canvas.deactivateAllWithDispatch().renderAll();
+  }
+
+  selectItemAfterAdded(obj) {
+    this.canvas.deactivateAllWithDispatch().renderAll();
+    this.canvas.setActiveObject(obj);
+  }
+
+  // ------------------------------- image cloning ------------------------------ 
+
+  clone() {
+    let activeObject = this.canvas.getActiveObject(),
+      activeGroup = this.canvas.getActiveGroup();
+
+    if (activeObject) {
+      let clone;
+      switch (activeObject.type) {
+        case 'rect':
+          clone = new fabric.Rect(activeObject.toObject());
+          break;
+        case 'circle':
+          clone = new fabric.Circle(activeObject.toObject());
+          break;
+        case 'triangle':
+          clone = new fabric.Triangle(activeObject.toObject());
+          break;
+        case 'i-text':
+          clone = new fabric.IText('', activeObject.toObject());
+          break;
+        case 'image':
+          clone = fabric.util.object.clone(activeObject);
+          break;
+      }
+      if (clone) {
+        clone.set({ left: 10, top: 10 });
+        this.canvas.add(clone);
+        this.selectItemAfterAdded(clone);
+      }
+    }
+  }
+
+  // ------------------------------- text adding ------------------------------
+
+  onAddText(textObj:object):void {
+    let textString = textObj['text'];
+    let text = new fabric.IText(textString, {
+      left: 10,
+      top: 10,
+      fontFamily: 'helvetica',
+      angle: 0,
+      fill: '#000000',
+      scaleX: 0.5,
+      scaleY: 0.5,
+      fontWeight: '',
+      hasRotatingPoint: true
+    });
+    this.extend(text, this.randomId());
+    this.canvas.add(text);
+    this.selectItemAfterAdded(text);
+    this.textString = '';
+  }
+
   // ------------------------------- utility ----------------------------------
+
+  randomId() {
+    return Math.floor(Math.random() * 999999) + 1;
+  }
 
   extend(obj, id) {
     obj.toObject = (function(toObject) {
@@ -86,22 +157,25 @@ export class CanvasComponent implements OnInit {
     })(obj.toObject);
   }
 
-  selectItemAfterAdded(obj) {
-    this.canvas.deactivateAllWithDispatch().renderAll();
-    this.canvas.setActiveObject(obj);
-  }
-
-  constructor( private elementRef: ElementRef, private utilService: UtilService ) {
+  constructor(private utilService: UtilService ) {
     this.addImageSubscription = utilService.addImageToCanvas$.subscribe(
       url => {
         this.addImageOnCanvas(url);
       }
     )
 
-    this.windowResizeSubscription = Observable.fromEvent(window,'resize').subscribe(
+    this.addTextSubscription = utilService.addTextToCanvas$.subscribe(
+      textObj => {
+        this.onAddText(textObj);
+      }
+    )
+
+    this.windowResizeSubscription = Observable.fromEvent(window,'resize').throttleTime(350).subscribe(
       ()=>{
-          this.size.height = window.innerHeight - 120;
-          this.size.width = Math.round((window.innerHeight - 120) * this.aspectRatioList[1]);
+          this.size.height = Math.round(window.innerHeight - 150);
+          this.size.width = Math.round((window.innerHeight - 150) * this.aspectRatioList[1]);
+          this.canvas.setWidth(this.size.width);
+          this.canvas.setHeight(this.size.height);
       }
     )
   }
