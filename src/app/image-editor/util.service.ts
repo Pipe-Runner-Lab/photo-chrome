@@ -18,11 +18,28 @@ export class UtilService {
     this.addTextToCanvasSource.next(textObj)
   }
 
+  // --------------------- Edit Text ----------------------------------------
+  private onUpdateTextSource = new Subject<any>();
+  onUpdateText$ = this.onUpdateTextSource.asObservable();
+  onUpdateText = (textObj) => {
+    this.onUpdateTextSource.next(textObj)
+  }
+
   // --------------------- On Change Tool type ------------------------------
   private changeToolTypeSource = new Subject<any>();
   changeToolType$ = this.changeToolTypeSource.asObservable();
-  changeToolType = (toolType) => {
-    this.changeToolTypeSource.next(toolType)
+  changeToolType = (toolType,activeObjectSettings) => {
+    if(activeObjectSettings){
+      this.changeToolTypeSource.next({
+        toolType:toolType,
+        activeObjectSettings:activeObjectSettings
+      })
+    }
+    else{
+      this.changeToolTypeSource.next({
+        toolType:toolType
+      })
+    }
   }
 
   // --------------------- Crop Image ---------------------------------------

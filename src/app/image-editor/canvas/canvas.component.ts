@@ -16,21 +16,21 @@ declare const fabric: any;
 export class CanvasComponent implements OnInit {
 
   private canvas: any;
-  private props: any = {
-    canvasFill: '#ffffff',
-    canvasImage: '',
-    id: null,
-    opacity: null,
-    fill: null,
-    fontSize: null,
-    lineHeight: null,
-    charSpacing: null,
-    fontWeight: null,
-    fontStyle: null,
-    textAlign: null,
-    fontFamily: null,
-    TextDecoration: ''
-  };
+  // private props: any = {
+  //   canvasFill: '#ffffff',
+  //   canvasImage: '',
+  //   id: null,
+  //   opacity: null,
+  //   fill: null,
+  //   fontSize: null,
+  //   lineHeight: null,
+  //   charSpacing: null,
+  //   fontWeight: null,
+  //   fontStyle: null,
+  //   textAlign: null,
+  //   fontFamily: null,
+  //   TextDecoration: ''
+  // };
 
   private aspectRatioList: number[] = [(6/6),(8/6),(7/5),(6/4)]
 
@@ -41,16 +41,13 @@ export class CanvasComponent implements OnInit {
     width: Math.round((window.innerHeight - 150) * this.aspectRatioList[1]),
   };
 
-  private json: any;
-  private globalEditor: boolean = false;
-  private textEditor: boolean = false;
-  private imageEditor: boolean = false;
-  private figureEditor: boolean = false;
-  private selected: any;
+  // private json: any;
+  // private selected: any;
 
   // ------------------------------- subscribtion ------------------------------
   private addImageSubscription:Subscription;
   private addTextSubscription:Subscription;
+  private onUpdateTextSubscription:Subscription;
   private windowResizeSubscription:Subscription;
 
   // ------------------------------- image adding ------------------------------ 
@@ -59,32 +56,24 @@ export class CanvasComponent implements OnInit {
     console.log(url);
     if (url) {
       fabric.Image.fromURL(url, (image) => {
+        let scaleXFactor = (this.size.width - 50)/image.width;
+        let scaleYFactor = (this.size.height - 50)/image.height;
+        console.log(image.width);
         image.set({
-          left: 10,
-          top: 10,
+          left: 25,
+          top: 25,
+          scaleX: scaleXFactor,
+          scaleY: scaleYFactor,
           angle: 0,
           padding: 10,
           cornersize: 10,
           hasRotatingPoint: true
         });
-        // image.setWidth(200);
-        // image.setHeight(200);
         this.extend(image, this.randomId());
         this.canvas.add(image);
         this.selectItemAfterAdded(image);
       });
     }
-  }
-
-  // ------------------------------- image selection ----------------------------
-
-  cleanSelect() {
-    this.canvas.deactivateAllWithDispatch().renderAll();
-  }
-
-  selectItemAfterAdded(obj) {
-    this.canvas.deactivateAllWithDispatch().renderAll();
-    this.canvas.setActiveObject(obj);
   }
 
   // ------------------------------- image cloning ------------------------------ 
@@ -127,12 +116,15 @@ export class CanvasComponent implements OnInit {
     let text = new fabric.IText(textString, {
       left: 10,
       top: 10,
-      fontFamily: 'helvetica',
       angle: 0,
-      fill: '#000000',
-      scaleX: 0.5,
-      scaleY: 0.5,
-      fontWeight: '',
+      opacity : 10,
+      fontFamily: textObj['fontFamily'],
+      fontSize:textObj['fontSize'],
+      fontWeight: textObj['fontWeight'],
+      fontStyle: textObj['fontStyle'],
+      fill: textObj['color'],
+      underline: textObj['underline'],
+      linethrough: textObj['linethrough'],
       hasRotatingPoint: true
     });
     this.extend(text, this.randomId());
@@ -141,7 +133,92 @@ export class CanvasComponent implements OnInit {
     this.textString = '';
   }
 
+  onSelectText(textObject):void{
+    const fontFamily = this.getObjectStyle('fontFamily',textObject);
+    const fontSize = this.getObjectStyle('fontSize',textObject);
+    const fontWeight = this.getObjectStyle('fontWeight',textObject);
+    const fontStyle = this.getObjectStyle('fontStyle',textObject);
+    const fill = this.getObjectStyle('fill',textObject);
+    const underline = this.getObjectStyle('underline',textObject);
+    const linethrough = this.getObjectStyle('linethrough',textObject);
+    
+    this.utilService.changeToolType('TEXT:EDITING',{
+      fontFamily:fontFamily,
+      fontSize:fontSize,
+      fontWeight:fontWeight,
+      fontStyle:fontStyle,
+      color:fill,
+      underline:underline,
+      linethrough:linethrough
+    });
+  }
+
+  onUpdateText(textObject):void{
+    // fix this shit
+    console.log(textObject);
+    const activeTextObject = this.getActiveSelection();
+    activeTextObject.fontFamily = textObject.fontFamily;
+    activeTextObject.fontSize = textObject.fontSize;
+    activeTextObject.fontWeight = textObject.fontWeight;
+    activeTextObject.fontStyle = textObject.fontStyle;
+    activeTextObject.fill = textObject.color;
+    activeTextObject.underline = textObject.underline;
+    activeTextObject.linethrough = textObject.linethrough;
+
+    this.canvas.renderAll();
+  }
+
+  onUpdateTextonCanvas():void{
+
+  }
+
   // ------------------------------- utility ----------------------------------
+  
+  getObjectStyle(styleName:string,object:object):any{
+      return object[styleName];
+  }
+
+  setObjectStyle(styleName:string,value:any,object:object):void{
+    // set style
+  }
+
+  selectItemAfterAdded(obj) {
+    this.canvas.discardActiveObject();
+    this.canvas.setActiveObject(obj).renderAll();
+  }
+
+  getActiveSelection():any{
+    const selectionList = this.canvas.getActiveObjects();
+    if(selectionList.length === 1){
+      const activeObject = selectionList[0];
+      switch (activeObject.type) {
+        case 'image':
+          return {
+            type:'IMAGE',
+            activeObject: activeObject
+          };
+        case 'i-text':
+          return {
+            type:'TEXT',
+            activeObject: activeObject
+          };
+        default:
+          return {
+            type:'UNKNOWN'
+          }
+      }
+    }
+    else{
+      return {
+        type:'GROUP',
+        activeObjectList: selectionList
+      }
+    }
+  }
+
+  cleanSelect() {
+    // this.canvas.deactivateAllWithDispatch().renderAll();
+  }
 
   randomId() {
     return Math.floor(Math.random() * 999999) + 1;
@@ -157,6 +234,7 @@ export class CanvasComponent implements OnInit {
     })(obj.toObject);
   }
 
+
   constructor(private utilService: UtilService ) {
     this.addImageSubscription = utilService.addImageToCanvas$.subscribe(
       url => {
@@ -167,6 +245,12 @@ export class CanvasComponent implements OnInit {
     this.addTextSubscription = utilService.addTextToCanvas$.subscribe(
       textObj => {
         this.onAddText(textObj);
+      }
+    )
+
+    this.onUpdateTextSubscription = utilService.onUpdateText$.subscribe(
+      textObj => {
+        this.onUpdateText(textObj);
       }
     )
 
@@ -191,10 +275,40 @@ export class CanvasComponent implements OnInit {
     // Default size of canvas
     this.canvas.setWidth(this.size.width);
     this.canvas.setHeight(this.size.height);
+
+    // Setup event listeners for canvas
+    this.canvas.on({
+      'selection:created':(event)=>{
+        const selectionType = this.getActiveSelection().type;
+
+        switch (selectionType) {
+          case 'TEXT':
+            this.onSelectText(this.getActiveSelection().activeObject);
+            break;
+          case 'IMAGE':
+            // this.onSelectText(this.getActiveSelection().activeObject);
+            break;        
+          default:
+            break;
+        }
+      },
+      'object:modified':(event)=>{
+        // Updating toolbar with updates
+        console.log('object modified');
+      },
+      'selection:cleared':(event)=>{
+        // Set the toolbar back to normal
+        this.utilService.changeToolType('MAIN',undefined);
+      }
+    })
   }
 
   ngOnDestroy(){
+    this.canvas.off();
+
     this.addImageSubscription.unsubscribe();
+    this.addTextSubscription.unsubscribe();
+    this.onUpdateTextSubscription.unsubscribe();
     this.windowResizeSubscription.unsubscribe();
   }
 

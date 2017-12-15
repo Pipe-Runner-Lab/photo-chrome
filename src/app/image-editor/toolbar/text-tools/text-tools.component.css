@@ -2,6 +2,10 @@
   color: #dddbdb;
 }
 
+.active-icon {
+  color: #69f0ae;
+}
+
 .text-field-container {
   width: 100%;
   margin: 12px 0px 0px 0px;
@@ -20,17 +24,34 @@
 .font-size-slider-container {
   width: 100%;
   margin: 16px 0px 0px 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.font-size {
+  height: 40px;
+  width: 40px;
+  color: #eeeeee;
+  line-height: 40px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.font-slider-wrapper {
+  flex: 1;
+  margin: 0px 8px 0px 0px;
 }
 
 .font-size-slider {
-  width: calc(100% - 16px);
-  margin: 0px 8px 0px 8px;
+  width: 100%;
 }
 
 .color-alpha-picker-container {
   width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .alpha-slider-wrapper {

@@ -14,11 +14,13 @@ export class ToolbarComponent implements OnInit {
   private selectedToolTypeList:string[] = [
     'MAIN',
     'TEXT',
+    'TEXT:EDITING',
     'CROP',
     'PREVIEW',
     'FILTER'
   ];
   private selectedToolType:string;
+  private activeObjectSettings:any;
 
   // ---------------------------- Subscription ------------------------------
   private onChangeToolTypeSubscription:Subscription;
@@ -31,7 +33,11 @@ export class ToolbarComponent implements OnInit {
   constructor(private utilService:UtilService) {
       this.selectedToolType = this.selectedToolTypeList[0];
       this.onChangeToolTypeSubscription = utilService.changeToolType$.subscribe(
-        (toolType)=>{
+        ({toolType,activeObjectSettings})=>{
+          if(activeObjectSettings){
+              console.log(activeObjectSettings);
+              this.activeObjectSettings = activeObjectSettings;
+          }
           this.onChangeToolType(toolType);
         }
       )

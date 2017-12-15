@@ -7,6 +7,6 @@
   </div>
   <div class="main-tool-slider">
     <app-main-tools *ngIf="selectedToolType==='MAIN'"></app-main-tools>
-    <app-text-tools *ngIf="selectedToolType==='TEXT'"></app-text-tools>
+    <app-text-tools [selectedToolType]="selectedToolType" [activeObjectSettings]="activeObjectSettings" *ngIf="selectedToolType==='TEXT' || selectedToolType==='TEXT:EDITING'"></app-text-tools>
   </div>
 </div>

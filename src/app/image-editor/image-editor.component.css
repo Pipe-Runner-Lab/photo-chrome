@@ -22,8 +22,8 @@
   position: relative;
   z-index: 10;
   background: #303030;
-  min-width: 244px;
-  max-width: 244px;
+  min-width: 220px;
+  max-width: 220px;
   height: 85%;
 }
 
@@ -34,7 +34,7 @@
 
 .toolbar-container {
   background: #303030;
-  min-width: 244px;
-  max-width: 244px;
+  min-width: 220px;
+  max-width: 220px;
   height: 85%;
 }
