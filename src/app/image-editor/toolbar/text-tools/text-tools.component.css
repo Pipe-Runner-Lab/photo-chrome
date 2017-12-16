@@ -28,7 +28,7 @@
 
 .text-field-container {
   width: 100%;
-  margin: 12px 0px 0px 0px;
+  margin: 4px 0px 0px 0px;
 }
 
 .text-field {
@@ -38,11 +38,11 @@
 }
 
 .font-style-container {
-  margin: 16px 0px 0px 0px;
+  margin: 4px 0px 0px 0px;
 }
 
 .text-align-container {
-  margin: 8px 0px 0px 0px;
+  margin: 4px 0px 0px 0px;
 }
 
 .font-size-text {
@@ -65,7 +65,7 @@
 
 .button-container {
   width: 100%;
-  margin: 16px 0px 0px 0px;
+  margin: 8px 0px 0px 0px;
 }
 
 .button {

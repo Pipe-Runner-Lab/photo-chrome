@@ -58,8 +58,8 @@ export class ImagePickerComponent implements OnInit {
   constructor(private utilService: UtilService ) {
     this.selection = undefined;
     this.onSelectionCreatedSubscription = utilService.onSelectionCreated$.subscribe(
-      Selection => {
-        this.selection = Selection;
+      ({selection}) => {
+        this.selection = selection;
       }
     )
    }

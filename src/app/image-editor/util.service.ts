@@ -45,8 +45,8 @@ export class UtilService {
   // ----------------------- Object manipulation ----------------------------
   private onSelectionCreatedSource = new Subject<any>();
   onSelectionCreated$ = this.onSelectionCreatedSource.asObservable();
-  onSelectionCreated = (selection) => {
-    this.onSelectionCreatedSource.next(selection);
+  onSelectionCreated = (selection,selectionType,extraOptions) => {
+    this.onSelectionCreatedSource.next({selection,selectionType,extraOptions});
   }
 
   private onSelectionModifiedSource = new Subject<any>();

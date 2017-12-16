@@ -21,13 +21,14 @@ export class CanvasComponent implements OnInit {
   private activeObject: any;
   private activeObjectList: any;
 
+  private screenReductionFactor:number = 200;
   private aspectRatioList: number[] = [(6/6),(8/6),(7/5),(6/4)]
 
   private textString: string;
   private url: string = '';
   private size: any = {
-    height: Math.round(window.innerHeight - 150),
-    width: Math.round((window.innerHeight - 150) * this.aspectRatioList[1]),
+    height: Math.round(window.innerHeight - this.screenReductionFactor),
+    width: Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[3]),
   };
 
   // private json: any;
@@ -296,8 +297,8 @@ export class CanvasComponent implements OnInit {
 
     this.windowResizeSubscription = Observable.fromEvent(window,'resize').throttleTime(250).subscribe(
       ()=>{
-          this.size.height = Math.round(window.innerHeight - 150);
-          this.size.width = Math.round((window.innerHeight - 150) * this.aspectRatioList[1]);
+          this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
+          this.size.width = Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[1]);
           this.canvas.setWidth(this.size.width);
           this.canvas.setHeight(this.size.height);
       }
@@ -315,7 +316,8 @@ export class CanvasComponent implements OnInit {
     this.canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
       selection: true,
-      selectionBorderColor: '#B3E5FC'
+      selectionBorderColor: '#B3E5FC',
+      backgroundColor:'#ffffff'
     }); 
 
     // Default size of canvas
@@ -330,9 +332,8 @@ export class CanvasComponent implements OnInit {
         this.activeObjectType = activeObjectSelection.type;
 
         if(this.activeObjectType === 'group'){
-          console.log('group selected');
           this.activeObjectList = activeObjectSelection.activeObjectList;
-          this.utilService.onSelectionCreated(this.activeObjectList);
+          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
         }
         else{
           this.activeObject = activeObjectSelection.activeObject;
@@ -347,10 +348,34 @@ export class CanvasComponent implements OnInit {
             default:
               break;
           }
-          this.utilService.onSelectionCreated(this.activeObject);
+          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
         }
-        console.log(this.activeObjectList);
-        console.log(this.activeObject);
+      },
+      'selection:updated':(event)=>{
+        // same things as in created
+        console.log('selection updated');
+        const activeObjectSelection = this.getActiveSelection();
+        this.activeObjectType = activeObjectSelection.type;
+
+        if(this.activeObjectType === 'group'){
+          this.activeObjectList = activeObjectSelection.activeObjectList;
+          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+        }
+        else{
+          this.activeObject = activeObjectSelection.activeObject;
+          switch (this.activeObjectType) {
+            case 'i-text':
+              this.toolType = 'TEXT:EDITING'              
+              this.onSelectText(this.activeObject);
+              break;
+            case 'image':
+              //call function for image selection
+              break;        
+            default:
+              break;
+          }
+          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+        }
       },
       'selection:cleared':(event)=>{
         console.log('selection inactive');
@@ -359,7 +384,7 @@ export class CanvasComponent implements OnInit {
         this.activeObject = undefined;
         this.activeObjectList = [];
         this.utilService.changeToolType(this.toolType,this.activeObject);
-        this.utilService.onSelectionCreated(this.activeObject);
+        this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
       },
       'text:editing:entered':(event)=>{
         console.log('editing entered');

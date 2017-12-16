@@ -6,7 +6,7 @@
 </div>
 
 <!-- text styling -->
-<mat-grid-list class="font-style-container" cols="4" rowHeight="52px">
+<mat-grid-list class="font-style-container" cols="4" rowHeight="48px">
   <mat-grid-tile>
     <button mat-icon-button (click)="toggleBold()"><i [ngClass]="{'active-icon':fontWeight==='bold'}" class="material-icons icons">format_bold</i></button>
   </mat-grid-tile>
@@ -22,7 +22,7 @@
 </mat-grid-list>
 
 <!-- text align -->
-<mat-grid-list *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" class="text-align-container" cols="4" rowHeight="52px">
+<mat-grid-list *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" class="text-align-container" cols="4" rowHeight="48px">
   <mat-grid-tile>
     <button mat-icon-button (click)="setTextAlign('left')"><i [ngClass]="{'active-icon':textAlign==='left'}" class="material-icons icons">format_align_left</i></button>
   </mat-grid-tile>
@@ -38,7 +38,7 @@
 </mat-grid-list>
 
 <!-- font size -->
-<div class="picker-container" style="margin:16px 0px 0px 0px;">
+<div class="picker-container" style="margin:12px 0px 0px 0px;">
   <div class="font-size-text">
     {{fontSize}}
   </div>
