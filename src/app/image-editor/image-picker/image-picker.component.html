@@ -5,6 +5,7 @@
     </button>
     <button mat-icon-button><i class="material-icons icons">photo_size_select_small</i></button>
     <div class="spacer"></div>
+    <button mat-icon-button (click)="onRemoveObjectFromCanvas()" *ngIf="selection!==undefined" ng color="warn"><i class="material-icons">delete_forever</i></button>
     <button mat-icon-button (click)="onClearAll()"><i class="material-icons icons">clear</i></button>
   </div>
   <div class="photo-slider">

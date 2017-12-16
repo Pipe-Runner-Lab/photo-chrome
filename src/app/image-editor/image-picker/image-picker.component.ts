@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UtilService } from '../util.service';
+import { Subscription }   from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-image-picker',
@@ -8,9 +9,13 @@ import { UtilService } from '../util.service';
 })
 export class ImagePickerComponent implements OnInit {
 
-  fileInputElement: any;
-  fileUrlList: string[] = [];
-  loadingFiles: boolean;  //add loader while files is being loaded
+  private fileInputElement: any;
+  private fileUrlList: string[] = [];
+  private loadingFiles: boolean;  //add loader while files is being loaded
+  private selection:any;
+
+  // ---------------------------- Subscription ------------------------------
+  private onSelectionCreatedSubscription:Subscription;
   
   onUploadButtonTrigger():void{
     this.fileInputElement.click();
@@ -23,7 +28,6 @@ export class ImagePickerComponent implements OnInit {
 
       reader.onload = (event) => {
         this.fileUrlList = [...this.fileUrlList,event.target['result']];
-
       }
 
       for( let i = 0, file; file = event.target.files[i]; i++ ){
@@ -43,11 +47,22 @@ export class ImagePickerComponent implements OnInit {
     this.fileUrlList = [];
   }
 
+  onRemoveObjectFromCanvas(){
+    this.utilService.onSelectionModified('DELETE');
+  }
+
   addImageOnCanvas(url:string):void{
     this.utilService.addImageToCanvas(url);
   }
 
-  constructor(private utilService: UtilService ) { }
+  constructor(private utilService: UtilService ) {
+    this.selection = undefined;
+    this.onSelectionCreatedSubscription = utilService.onSelectionCreated$.subscribe(
+      Selection => {
+        this.selection = Selection;
+      }
+    )
+   }
 
   ngOnInit() {
     this.fileInputElement = document.getElementById('upload-file-input');

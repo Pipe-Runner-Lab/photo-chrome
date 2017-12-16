@@ -38,6 +38,7 @@ export class CanvasComponent implements OnInit {
   private addTextSubscription:Subscription;
   private onUpdateTextSubscription:Subscription;
   private windowResizeSubscription:Subscription;
+  private onSelectionModifiedSubscription:Subscription;
 
   // ------------------------------- image adding ------------------------------ 
 
@@ -221,7 +222,20 @@ export class CanvasComponent implements OnInit {
   }
 
   cleanSelect() {
-    // this.canvas.deactivateAllWithDispatch().renderAll();
+    this.canvas.discardActiveObject().renderAll();
+  }
+
+  removeSelection(){
+    if(this.activeObjectType === 'group'){
+      console.log('deleting group');
+      this.activeObjectList.map((activeObject,index)=>{
+        this.canvas.remove(activeObject);
+      },this)
+    }
+    else{
+      this.canvas.remove(this.activeObject);
+    }
+    this.cleanSelect();
   }
 
   randomId() {
@@ -267,6 +281,19 @@ export class CanvasComponent implements OnInit {
       }
     )
 
+    this.onSelectionModifiedSubscription = utilService.onSelectionModified$.subscribe(
+      (modificationType) => {
+        switch (modificationType) {
+          case 'DELETE':
+            this.removeSelection();
+            break;
+        
+          default:
+            break;
+        }
+      }
+    )
+
     this.windowResizeSubscription = Observable.fromEvent(window,'resize').throttleTime(250).subscribe(
       ()=>{
           this.size.height = Math.round(window.innerHeight - 150);
@@ -298,12 +325,14 @@ export class CanvasComponent implements OnInit {
     // Setup event listeners for canvas
     this.canvas.on({
       'selection:created':(event)=>{
-        // const selectionType = this.getActiveSelection().type;
+        console.log('selection active');
         const activeObjectSelection = this.getActiveSelection();
         this.activeObjectType = activeObjectSelection.type;
 
         if(this.activeObjectType === 'group'){
+          console.log('group selected');
           this.activeObjectList = activeObjectSelection.activeObjectList;
+          this.utilService.onSelectionCreated(this.activeObjectList);
         }
         else{
           this.activeObject = activeObjectSelection.activeObject;
@@ -318,14 +347,19 @@ export class CanvasComponent implements OnInit {
             default:
               break;
           }
+          this.utilService.onSelectionCreated(this.activeObject);
         }
+        console.log(this.activeObjectList);
+        console.log(this.activeObject);
       },
       'selection:cleared':(event)=>{
+        console.log('selection inactive');
         this.toolType = 'MAIN';
         this.activeObjectType = '';
         this.activeObject = undefined;
         this.activeObjectList = [];
         this.utilService.changeToolType(this.toolType,this.activeObject);
+        this.utilService.onSelectionCreated(this.activeObject);
       },
       'text:editing:entered':(event)=>{
         console.log('editing entered');
@@ -365,6 +399,7 @@ export class CanvasComponent implements OnInit {
     this.addTextSubscription.unsubscribe();
     this.onUpdateTextSubscription.unsubscribe();
     this.windowResizeSubscription.unsubscribe();
+    this.onSelectionModifiedSubscription.unsubscribe();
   }
 
 }

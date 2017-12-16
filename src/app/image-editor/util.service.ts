@@ -42,6 +42,17 @@ export class UtilService {
     }
   }
 
-  // --------------------- Crop Image ---------------------------------------
+  // ----------------------- Object manipulation ----------------------------
+  private onSelectionCreatedSource = new Subject<any>();
+  onSelectionCreated$ = this.onSelectionCreatedSource.asObservable();
+  onSelectionCreated = (selection) => {
+    this.onSelectionCreatedSource.next(selection);
+  }
+
+  private onSelectionModifiedSource = new Subject<any>();
+  onSelectionModified$ = this.onSelectionModifiedSource.asObservable();
+  onSelectionModified = (modificationType) => {
+    this.onSelectionModifiedSource.next(modificationType);
+  }
 
 }
