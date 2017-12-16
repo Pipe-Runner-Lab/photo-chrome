@@ -16,21 +16,10 @@ declare const fabric: any;
 export class CanvasComponent implements OnInit {
 
   private canvas: any;
-  // private props: any = {
-  //   canvasFill: '#ffffff',
-  //   canvasImage: '',
-  //   id: null,
-  //   opacity: null,
-  //   fill: null,
-  //   fontSize: null,
-  //   lineHeight: null,
-  //   charSpacing: null,
-  //   fontWeight: null,
-  //   fontStyle: null,
-  //   textAlign: null,
-  //   fontFamily: null,
-  //   TextDecoration: ''
-  // };
+  private toolType: string;
+  private activeObjectType: string;
+  private activeObject: any;
+  private activeObjectList: any;
 
   private aspectRatioList: number[] = [(6/6),(8/6),(7/5),(6/4)]
 
@@ -111,76 +100,91 @@ export class CanvasComponent implements OnInit {
 
   // ------------------------------- text adding ------------------------------
 
-  onAddText(textObj:object):void {
-    let textString = textObj['text'];
-    let text = new fabric.IText(textString, {
+  onAddText(textProps:object):void {
+    const textObject = new fabric.IText(textProps['text'], {
       left: 10,
       top: 10,
       angle: 0,
-      opacity : 10,
-      fontFamily: textObj['fontFamily'],
-      fontSize:textObj['fontSize'],
-      fontWeight: textObj['fontWeight'],
-      fontStyle: textObj['fontStyle'],
-      fill: textObj['color'],
-      underline: textObj['underline'],
-      linethrough: textObj['linethrough'],
-      hasRotatingPoint: true
+      fontFamily: textProps['fontFamily'],
+      fontSize:textProps['fontSize'],
+      fontWeight: textProps['fontWeight'],
+      fontStyle: textProps['fontStyle'],
+      fill: textProps['color'],
+      opacity : textProps['opacity'],
+      underline: textProps['underline'],
+      linethrough: textProps['linethrough'],
+      textAlign: textProps['textAlign'],
+      hasRotatingPoint: true,
+      lockScalingX:true,
+      lockScalingY:true,
     });
-    this.extend(text, this.randomId());
-    this.canvas.add(text);
-    this.selectItemAfterAdded(text);
-    this.textString = '';
+    this.extend(textObject, this.randomId());
+    this.canvas.add(textObject);
+    this.selectItemAfterAdded(textObject);
   }
 
   onSelectText(textObject):void{
-    const fontFamily = this.getObjectStyle('fontFamily',textObject);
-    const fontSize = this.getObjectStyle('fontSize',textObject);
-    const fontWeight = this.getObjectStyle('fontWeight',textObject);
-    const fontStyle = this.getObjectStyle('fontStyle',textObject);
-    const fill = this.getObjectStyle('fill',textObject);
-    const underline = this.getObjectStyle('underline',textObject);
-    const linethrough = this.getObjectStyle('linethrough',textObject);
+    const fontFamily = textObject['fontFamily'];
+    const fontSize = textObject['fontSize'];
+    const fontWeight = textObject['fontWeight']
+    const fontStyle = textObject['fontStyle'];
+    const fill = textObject['fill'];
+    const opacity = textObject['opacity'];
+    const underline = textObject['underline'];
+    const linethrough = textObject['linethrough'];
+    const textAlign = textObject['textAlign'];
+    const lineHeight = textObject['lineHeight'];
+    const charSpacing = textObject['charSpacing'];
     
-    this.utilService.changeToolType('TEXT:EDITING',{
+    this.utilService.changeToolType(this.toolType,{
       fontFamily:fontFamily,
       fontSize:fontSize,
       fontWeight:fontWeight,
       fontStyle:fontStyle,
       color:fill,
+      opacity:opacity,
       underline:underline,
-      linethrough:linethrough
+      linethrough:linethrough,
+      textAlign:textAlign,
+      lineHeight:lineHeight,
+      charSpacing:charSpacing
     });
   }
 
-  onUpdateText(textObject):void{
-    // fix this shit
-    console.log(textObject);
-    const activeTextObject = this.getActiveSelection();
-    activeTextObject.fontFamily = textObject.fontFamily;
-    activeTextObject.fontSize = textObject.fontSize;
-    activeTextObject.fontWeight = textObject.fontWeight;
-    activeTextObject.fontStyle = textObject.fontStyle;
-    activeTextObject.fill = textObject.color;
-    activeTextObject.underline = textObject.underline;
-    activeTextObject.linethrough = textObject.linethrough;
+  onAdvancedSelectText(textObject):void{
+    // if(textObject.isEditing){
+    //   // const startIndex = textObject.selectionStart;
+    //   // const endIndex = textObject.selectionEnd;
+    //   console.log(textObject.getSelectionStyles())
+    // }
+    this.utilService.changeToolType(this.toolType,{});
+  }
 
+  onUpdateText(textProps):void{
+    const activeTextObject = this.activeObject;
+    activeTextObject.set('fontFamily',textProps.fontFamily);
+    activeTextObject.set('fontSize',textProps.fontSize);
+    activeTextObject.set('fontWeight',textProps.fontWeight);
+    activeTextObject.set('fontStyle', textProps.fontStyle);
+    activeTextObject.set('fill',textProps.color);
+    activeTextObject.set('opacity',textProps.opacity);
+    activeTextObject.set('underline',textProps.underline);
+    activeTextObject.set('linethrough',textProps.linethrough);
+    activeTextObject.set('textAlign',textProps.textAlign);
+    activeTextObject.set('lineHeight',textProps.lineHeight);
+    activeTextObject.set('charSpacing',textProps.charSpacing);
     this.canvas.renderAll();
   }
 
-  onUpdateTextonCanvas():void{
-
+  onAdvancedUpdateText(textProps):void{
+    const activeObject = this.activeObject;
+    if( activeObject.isEditing ){
+      activeObject.setSelectionStyles(textProps);
+    }
+    this.canvas.renderAll();
   }
 
   // ------------------------------- utility ----------------------------------
-  
-  getObjectStyle(styleName:string,object:object):any{
-      return object[styleName];
-  }
-
-  setObjectStyle(styleName:string,value:any,object:object):void{
-    // set style
-  }
 
   selectItemAfterAdded(obj) {
     this.canvas.discardActiveObject();
@@ -194,12 +198,12 @@ export class CanvasComponent implements OnInit {
       switch (activeObject.type) {
         case 'image':
           return {
-            type:'IMAGE',
+            type:'image',
             activeObject: activeObject
           };
         case 'i-text':
           return {
-            type:'TEXT',
+            type:'i-text',
             activeObject: activeObject
           };
         default:
@@ -210,7 +214,7 @@ export class CanvasComponent implements OnInit {
     }
     else{
       return {
-        type:'GROUP',
+        type:'group',
         activeObjectList: selectionList
       }
     }
@@ -243,18 +247,27 @@ export class CanvasComponent implements OnInit {
     )
 
     this.addTextSubscription = utilService.addTextToCanvas$.subscribe(
-      textObj => {
-        this.onAddText(textObj);
+      textProps => {
+        this.onAddText(textProps);
       }
     )
 
     this.onUpdateTextSubscription = utilService.onUpdateText$.subscribe(
-      textObj => {
-        this.onUpdateText(textObj);
+      (textProps) => {
+        switch (this.toolType) {
+          case 'TEXT:EDITING':
+            this.onUpdateText(textProps);
+            break;
+          case 'TEXT:EDITING-ADVANCED':
+            this.onAdvancedUpdateText(textProps);
+            break;
+          default:
+            break;
+        }
       }
     )
 
-    this.windowResizeSubscription = Observable.fromEvent(window,'resize').throttleTime(350).subscribe(
+    this.windowResizeSubscription = Observable.fromEvent(window,'resize').throttleTime(250).subscribe(
       ()=>{
           this.size.height = Math.round(window.innerHeight - 150);
           this.size.width = Math.round((window.innerHeight - 150) * this.aspectRatioList[1]);
@@ -265,6 +278,12 @@ export class CanvasComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Setting up editor default setting
+    this.toolType = 'MAIN';
+    this.activeObjectType = ''
+    this.activeObject = undefined;
+    this.activeObjectList = [];
+
     // Setting up fabric object on canvas
     this.canvas = new fabric.Canvas('canvas', {
       hoverCursor: 'pointer',
@@ -279,27 +298,63 @@ export class CanvasComponent implements OnInit {
     // Setup event listeners for canvas
     this.canvas.on({
       'selection:created':(event)=>{
-        const selectionType = this.getActiveSelection().type;
+        // const selectionType = this.getActiveSelection().type;
+        const activeObjectSelection = this.getActiveSelection();
+        this.activeObjectType = activeObjectSelection.type;
 
-        switch (selectionType) {
-          case 'TEXT':
-            this.onSelectText(this.getActiveSelection().activeObject);
-            break;
-          case 'IMAGE':
-            // this.onSelectText(this.getActiveSelection().activeObject);
-            break;        
-          default:
-            break;
+        if(this.activeObjectType === 'group'){
+          this.activeObjectList = activeObjectSelection.activeObjectList;
+        }
+        else{
+          this.activeObject = activeObjectSelection.activeObject;
+          switch (this.activeObjectType) {
+            case 'i-text':
+              this.toolType = 'TEXT:EDITING'              
+              this.onSelectText(this.activeObject);
+              break;
+            case 'image':
+              //call function for image selection
+              break;        
+            default:
+              break;
+          }
         }
       },
-      'object:modified':(event)=>{
-        // Updating toolbar with updates
-        console.log('object modified');
-      },
       'selection:cleared':(event)=>{
-        // Set the toolbar back to normal
-        this.utilService.changeToolType('MAIN',undefined);
-      }
+        this.toolType = 'MAIN';
+        this.activeObjectType = '';
+        this.activeObject = undefined;
+        this.activeObjectList = [];
+        this.utilService.changeToolType(this.toolType,this.activeObject);
+      },
+      'text:editing:entered':(event)=>{
+        console.log('editing entered');
+        const activeObjectSelection = this.getActiveSelection();
+        this.toolType = 'TEXT:EDITING-ADVANCED'
+        this.activeObjectType = activeObjectSelection.type;
+        this.activeObject = activeObjectSelection.activeObject;
+        if(this.activeObjectType === 'i-text'){
+          this.onAdvancedSelectText(this.activeObject);
+        }
+      },
+      'text:editing:exited':(event)=>{
+        console.log('editing exit');
+        this.toolType = 'MAIN';
+        this.activeObjectType = '';
+        this.activeObject = undefined;
+        this.activeObjectList = [];
+        this.utilService.changeToolType(this.toolType,this.activeObject);
+      },
+      'text:selection:changed':(event)=>{
+        // using preselected text object to optimize
+        console.log('selection change');
+        if(this.activeObjectType === 'i-text'){
+          this.onAdvancedSelectText(this.activeObject);
+        }
+      },
+      'text:changed':(event)=>{
+        console.log('text changed');
+      },
     })
   }
 

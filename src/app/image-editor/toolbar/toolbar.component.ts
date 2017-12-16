@@ -20,7 +20,7 @@ export class ToolbarComponent implements OnInit {
     'FILTER'
   ];
   private selectedToolType:string;
-  private activeObjectSettings:any;
+  private activeObjectProps:any;
 
   // ---------------------------- Subscription ------------------------------
   private onChangeToolTypeSubscription:Subscription;
@@ -33,10 +33,9 @@ export class ToolbarComponent implements OnInit {
   constructor(private utilService:UtilService) {
       this.selectedToolType = this.selectedToolTypeList[0];
       this.onChangeToolTypeSubscription = utilService.changeToolType$.subscribe(
-        ({toolType,activeObjectSettings})=>{
-          if(activeObjectSettings){
-              console.log(activeObjectSettings);
-              this.activeObjectSettings = activeObjectSettings;
+        ({toolType,activeObjectProps})=>{
+          if(activeObjectProps){
+              this.activeObjectProps = activeObjectProps;
           }
           this.onChangeToolType(toolType);
         }

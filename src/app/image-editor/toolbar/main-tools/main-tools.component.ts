@@ -9,7 +9,7 @@ import {UtilService} from '../../util.service';
 export class MainToolsComponent implements OnInit {
 
   onChangeToolType(toolType:string):void{
-    this.utilService.changeToolType(toolType);
+    this.utilService.changeToolType(toolType,{});
   }
 
   constructor(private utilService: UtilService) { }

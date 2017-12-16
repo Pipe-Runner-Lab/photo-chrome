@@ -9,42 +9,67 @@ import {UtilService} from '../../util.service';
 export class TextToolsComponent implements OnInit {
 
   @Input() selectedToolType;
-  @Input() activeObjectSettings;
+  @Input() activeObjectProps;
 
   private text:string;
   private color:string;
+  private opacity:number;
   private fontFamily:string;
   private fontSize:number;
   private fontWeight:string;
   private fontStyle:string;
   private underline:boolean;
   private linethrough:boolean;
+  private textAlign:string;
+  private lineHeight:number;
+  private charSpacing:number;
 
   addTextToCanvas():void{
     this.utilService.addTextToCanvas({
       text:this.text,
       color: this.color,
+      opacity: this.opacity,
       fontFamily:this.fontFamily,
       fontSize:this.fontSize,
       fontWeight:this.fontWeight,
       fontStyle:this.fontStyle,
+      textAlign:this.textAlign,
       underline:this.underline,
       linethrough:this.linethrough
     })
   }
 
   onUpdateText():void{
-    this.utilService.onUpdateText(
-      {
-        color: this.color,
-        fontFamily:this.fontFamily,
-        fontSize:this.fontSize,
-        fontWeight:this.fontWeight,
-        fontStyle:this.fontStyle,
-        underline:this.underline,
-        linethrough:this.linethrough
-      }
-    )
+    if(this.selectedToolType === 'TEXT:EDITING'){
+      this.utilService.onUpdateText(
+        {
+          color: this.color,
+          opacity: this.opacity,
+          fontFamily:this.fontFamily,
+          fontSize:this.fontSize,
+          fontWeight:this.fontWeight,
+          fontStyle:this.fontStyle,
+          underline:this.underline,
+          linethrough:this.linethrough,
+          textAlign:this.textAlign,
+          lineHeight:this.lineHeight,
+          charSpacing:this.charSpacing
+        }
+      )
+    }
+    else if( this.selectedToolType === 'TEXT:EDITING-ADVANCED' ){
+      this.utilService.onUpdateText(
+        {
+          fill: this.color,
+          fontFamily:this.fontFamily,
+          fontSize:this.fontSize,
+          fontWeight:this.fontWeight,
+          fontStyle:this.fontStyle,
+          underline:this.underline,
+          linethrough:this.linethrough,
+        }
+      )
+    }
   }
   
   toggleBold():void{
@@ -63,26 +88,61 @@ export class TextToolsComponent implements OnInit {
     this.linethrough = !this.linethrough;
   }
 
+  setTextAlign(alignment):void{
+    this.textAlign = alignment;
+  }
+
   constructor(private utilService:UtilService) { 
     this.text = 'Sample Text';
     this.color = '#ffffff';
+    this.opacity = 1;
     this.fontFamily = 'helvetica';
     this.fontSize = 24;
     this.fontWeight = 'normal';
     this.fontStyle = 'normal';
     this.underline = false;
     this.linethrough = false;
+    this.textAlign = 'left';
+    this.lineHeight = 1.6;
+    this.charSpacing = 0;
   }
 
   ngOnInit() {
-    if(this.activeObjectSettings){
-      this.text = '';
-      this.color = this.activeObjectSettings.color;
-      this.fontFamily = this.activeObjectSettings.fontFamily;
-      this.fontSize = this.activeObjectSettings.fontSize;
-      this.fontStyle = this.activeObjectSettings.fontStyle;
-      this.underline = this.activeObjectSettings.underline;
-      this.linethrough = this.activeObjectSettings.linethrough;
+    if(this.activeObjectProps && this.selectedToolType === 'TEXT:EDITING'){
+      this.color = this.activeObjectProps.color;
+      this.opacity = this.activeObjectProps.opacity;
+      this.fontFamily = this.activeObjectProps.fontFamily;
+      this.fontSize = this.activeObjectProps.fontSize;
+      this.fontStyle = this.activeObjectProps.fontStyle;
+      this.underline = this.activeObjectProps.underline;
+      this.linethrough = this.activeObjectProps.linethrough;
+      this.textAlign = this.activeObjectProps.textAlign;
+      this.lineHeight = this.activeObjectProps.lineHeight;
+      this.charSpacing = this.activeObjectProps.charSpacing;
+    }
+  }
+
+  ngOnChanges(){
+    if(this.activeObjectProps && this.selectedToolType === 'TEXT:EDITING'){
+      this.color = this.activeObjectProps.color;
+      this.opacity = this.activeObjectProps.opacity;
+      this.fontFamily = this.activeObjectProps.fontFamily;
+      this.fontSize = this.activeObjectProps.fontSize;
+      this.fontStyle = this.activeObjectProps.fontStyle;
+      this.underline = this.activeObjectProps.underline;
+      this.linethrough = this.activeObjectProps.linethrough;
+      this.textAlign = this.activeObjectProps.textAlign;
+      this.lineHeight = this.activeObjectProps.lineHeight;
+      this.charSpacing = this.activeObjectProps.charSpacing;
+    }
+    else if( this.selectedToolType === 'TEXT:EDITING-ADVANCED' ){
+      this.color = '#ffffff';
+      this.fontFamily = 'helvetica';
+      this.fontSize = 24;
+      this.fontWeight = 'normal';
+      this.fontStyle = 'normal';
+      this.underline = false;
+      this.linethrough = false;
     }
   }
 

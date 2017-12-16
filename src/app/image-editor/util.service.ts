@@ -21,18 +21,18 @@ export class UtilService {
   // --------------------- Edit Text ----------------------------------------
   private onUpdateTextSource = new Subject<any>();
   onUpdateText$ = this.onUpdateTextSource.asObservable();
-  onUpdateText = (textObj) => {
-    this.onUpdateTextSource.next(textObj)
+  onUpdateText = (textProps) => {
+    this.onUpdateTextSource.next(textProps);
   }
 
   // --------------------- On Change Tool type ------------------------------
   private changeToolTypeSource = new Subject<any>();
   changeToolType$ = this.changeToolTypeSource.asObservable();
-  changeToolType = (toolType,activeObjectSettings) => {
-    if(activeObjectSettings){
+  changeToolType = (toolType,activeObjectProps) => {
+    if(activeObjectProps){
       this.changeToolTypeSource.next({
         toolType:toolType,
-        activeObjectSettings:activeObjectSettings
+        activeObjectProps:activeObjectProps
       })
     }
     else{
