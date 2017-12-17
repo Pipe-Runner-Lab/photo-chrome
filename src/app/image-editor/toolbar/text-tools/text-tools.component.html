@@ -37,25 +37,25 @@
   </mat-grid-tile>
 </mat-grid-list>
 
-<!-- font size -->
-<div class="picker-container" style="margin:12px 0px 0px 0px;">
-  <div class="font-size-text">
-    {{fontSize}}
-  </div>
-  <div class="slider-wrapper">
-    <mat-slider min="8" step="1" max="74" thumb-label="true" [(ngModel)]="fontSize" class="slider "></mat-slider>
-  </div>
-</div>
-
 <!-- color and opacity picker -->
-<div class="picker-container">
-  <button mat-icon-button [(colorPicker)]="color" [cpWidth]="205" [cpDisableInput]="true" [cpPosition]="selectedToolType!=='TEXT'?'bottom':'top'"
-    [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
+<div class="picker-container" style="margin:12px 0px 0px 0px;">
+  <button mat-icon-button [(colorPicker)]="color" [cpWidth]="196" [cpDisableInput]="true" [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
+    [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
   <i [style.color]="color " class="material-icons icons">color_lens</i>
   </button>
   <div class="slider-wrapper">
     <mat-slider *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="opacity"
       class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- font size -->
+<div class="picker-container">
+  <div class="font-size-text">
+    {{fontSize}}
+  </div>
+  <div class="slider-wrapper">
+    <mat-slider min="8" step="1" max="74" thumb-label="true" [(ngModel)]="fontSize" class="slider "></mat-slider>
   </div>
 </div>
 

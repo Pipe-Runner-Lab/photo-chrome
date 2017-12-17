@@ -21,7 +21,7 @@ export class CanvasComponent implements OnInit {
   private activeObject: any;
   private activeObjectList: any;
 
-  private screenReductionFactor:number = 200;
+  private screenReductionFactor:number = 180;
   private aspectRatioList: number[] = [(6/6),(8/6),(7/5),(6/4)]
 
   private textString: string;
@@ -385,6 +385,9 @@ export class CanvasComponent implements OnInit {
         this.activeObjectList = [];
         this.utilService.changeToolType(this.toolType,this.activeObject);
         this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+      },
+      'object:modified':(event)=>{
+        console.log('object modified');
       },
       'text:editing:entered':(event)=>{
         console.log('editing entered');

@@ -23,9 +23,9 @@
   position: relative;
   z-index: 10;
   background: #303030;
-  min-width: 220px;
-  max-width: 220px;
-  height: 75%;
+  min-width: 208px;
+  max-width: 208px;
+  height: 78%;
 }
 
 .canvas-container {
@@ -36,7 +36,7 @@
 
 .toolbar-container {
   background: #303030;
-  min-width: 220px;
-  max-width: 220px;
-  height: 75%;
+  min-width: 208px;
+  max-width: 208px;
+  height: 78%;
 }
