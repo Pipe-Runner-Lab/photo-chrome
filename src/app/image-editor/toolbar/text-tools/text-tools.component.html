@@ -49,8 +49,8 @@
 
 <!-- color and opacity picker -->
 <div class="picker-container">
-  <button mat-icon-button [(colorPicker)]="color" [cpWidth]="205 " [cpPosition]="'bottom'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true"
-    [cpSaveClickOutside]="true">
+  <button mat-icon-button [(colorPicker)]="color" [cpWidth]="205" [cpDisableInput]="true" [cpPosition]="selectedToolType!=='TEXT'?'bottom':'top'"
+    [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
   <i [style.color]="color " class="material-icons icons">color_lens</i>
   </button>
   <div class="slider-wrapper">
