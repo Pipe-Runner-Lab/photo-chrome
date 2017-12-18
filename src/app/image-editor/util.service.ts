@@ -11,6 +11,13 @@ export class UtilService {
     this.addImageToCanvasSource.next(url)
   }
 
+  // --------------------- Adding Image filter ------------------------------
+  private addImageFilterSource = new Subject<any>();
+  addImageFilter$ = this.addImageFilterSource.asObservable();
+  addImageFilter = (filterScope,filterProps) => {
+    this.addImageFilterSource.next({filterScope,filterProps})
+  }
+
   // --------------------- Add Text to Canvas -------------------------------
   private addTextToCanvasSource = new Subject<any>();
   addTextToCanvas$ = this.addTextToCanvasSource.asObservable();

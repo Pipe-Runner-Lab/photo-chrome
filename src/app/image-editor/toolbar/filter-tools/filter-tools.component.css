@@ -1,0 +1,56 @@
+/* component globals */
+
+.icons {
+  color: #dddbdb;
+}
+
+.active-icon {
+  color: #69f0ae;
+}
+
+.non-interactive-icon-wrapper {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-wrapper {
+  flex: 1;
+  margin: 0px 8px 0px 0px;
+}
+
+.slider {
+  width: 100%;
+}
+
+.picker-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 2px 0px 0px 0px;
+}
+
+.panel-container {
+  width: 100%;
+  margin: 8px 0px 0px 0px;
+}
+
+/* component specific */
+
+.ilter-scope-container {
+  margin: 4px 0px 0px 0px;
+}
+
+.button-container {
+  width: 100%;
+  margin: 8px 0px 0px 0px;
+}
+
+.button {
+  width: calc(100% - 16px);
+  margin: 0px 8px 0px 8px;
+}

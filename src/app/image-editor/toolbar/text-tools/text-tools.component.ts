@@ -127,6 +127,7 @@ export class TextToolsComponent implements OnInit {
       this.color = this.activeObjectProps.color;
       this.opacity = this.activeObjectProps.opacity;
       this.fontFamily = this.activeObjectProps.fontFamily;
+      this.fontWeight = this.activeObjectProps.fontWeight;
       this.fontSize = this.activeObjectProps.fontSize;
       this.fontStyle = this.activeObjectProps.fontStyle;
       this.underline = this.activeObjectProps.underline;

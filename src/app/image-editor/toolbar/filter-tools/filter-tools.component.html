@@ -1,3 +1,120 @@
-<p>
-  filter-tools works!
-</p>
+<!-- filter scope -->
+<mat-grid-list class="filter-scope-container" cols="2" rowHeight="48px">
+  <mat-grid-tile>
+    <button mat-icon-button [disabled]="filterScope==='ALL'" (click)="toggleScope('ALL')"><i [ngClass]="{'active-icon':filterScope==='ALL'}" class="material-icons icons">photo_size_select_actual</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button mat-icon-button disabled><i [ngClass]="{'active-icon':filterScope==='SINGLE'}" class="material-icons icons">photo_size_select_large</i></button>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<!-- Advanced setting panel -->
+<div *ngIf="panelType==='ADVANCED'" class="panel-container">
+  <!-- brightness amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">brightness_medium</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="-1" step="0.005" max="1" thumb-label="true" [(ngModel)]="filterValues['brightness']" (change)="onFilterUpdate()"
+        class="slider "></mat-slider>
+    </div>
+  </div>
+
+  <!-- contrast amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">brightness_2</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="-1" step="0.005" max="1" thumb-label="true" [(ngModel)]="filterValues['contrast']" (change)="onFilterUpdate()"
+        class="slider "></mat-slider>
+    </div>
+  </div>
+
+  <!-- saturation amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">invert_colors</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="-1" step="0.005" max="1" thumb-label="true" [(ngModel)]="filterValues['saturation']" (change)="onFilterUpdate()"
+        class="slider "></mat-slider>
+    </div>
+  </div>
+
+  <!-- Hue amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">colorize</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="-2" step="0.002" max="2" thumb-label="true" [(ngModel)]="filterValues['hue']" (change)="onFilterUpdate()"
+        class="slider"></mat-slider>
+    </div>
+  </div>
+
+  <!-- Noise amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">graphic_eq</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="0" step="1" max="1000" thumb-label="true" [(ngModel)]="filterValues['noise']" (change)="onFilterUpdate()"
+        class="slider"></mat-slider>
+    </div>
+  </div>
+
+  <!-- blur amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">blur_circular</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="0" step="0.01" max="1" thumb-label="true" [(ngModel)]="filterValues['blur']" (change)="onFilterUpdate()"
+        class="slider"></mat-slider>
+    </div>
+  </div>
+
+  <!-- pixelate amount -->
+  <div class="picker-container">
+    <div class="non-interactive-icon-wrapper">
+      <i class="material-icons icons">view_module</i>
+    </div>
+    <div class="slider-wrapper">
+      <mat-slider min="0" step="1" max="20" thumb-label="true" [(ngModel)]="filterValues['pixelate']" (change)="onFilterUpdate()"
+        class="slider"></mat-slider>
+    </div>
+  </div>
+
+  <!-- preset panel button -->
+  <div class="button-container">
+    <button mat-raised-button color="primary" class="button" (click)="onPanelChange('PRESET')">SHOW PRESET</button>
+  </div>
+</div>
+
+<div *ngIf="panelType==='PRESET'" class="panel-container">
+
+  <!-- advanced panel button -->
+  <div class="button-container">
+    <button mat-raised-button [color]="filterValues.sharpen?'accent':'warn'" class="button" (click)="togglePreset('sharpen')">SHARPEN</button>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button [color]="filterValues.emboss?'accent':'warn'" class="button" (click)="togglePreset('emboss')">EMBOSS</button>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button [color]="filterValues.grayscale?'accent':'warn'" class="button" (click)="togglePreset('grayscale')">GRAYSCALE</button>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button [color]="filterValues.vintage?'accent':'warn'" class="button" (click)="togglePreset('vintage')">VINTAGE</button>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button [color]="filterValues.sepia?'accent':'warn'" class="button" (click)="togglePreset('sepia')">SEPIA</button>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button [color]="filterValues.polaroid?'accent':'warn'" class="button" (click)="togglePreset('polaroid')">POLAROID</button>
+  </div>
+  <div class="button-container">
+    <button mat-raised-button color="primary" class="button" (click)="onPanelChange('ADVANCED')">ADVANCED SETTINGS</button>
+  </div>
+</div>

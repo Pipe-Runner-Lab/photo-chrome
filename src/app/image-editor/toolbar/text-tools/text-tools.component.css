@@ -24,6 +24,10 @@
   align-items: center;
 }
 
+.style-container {
+  margin: 4px 0px 0px 0px;
+}
+
 /* component specific */
 
 .text-field-container {
@@ -35,14 +39,6 @@
   width: calc(100% - 16px);
   margin: 0px 8px 0px 8px;
   color: #eeeeee;
-}
-
-.font-style-container {
-  margin: 4px 0px 0px 0px;
-}
-
-.text-align-container {
-  margin: 4px 0px 0px 0px;
 }
 
 .font-size-text {

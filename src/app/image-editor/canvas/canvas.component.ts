@@ -36,20 +36,19 @@ export class CanvasComponent implements OnInit {
 
   // ------------------------------- subscribtion ------------------------------
   private addImageSubscription:Subscription;
+  private addImageFilterSubscription:Subscription;
   private addTextSubscription:Subscription;
   private onUpdateTextSubscription:Subscription;
   private windowResizeSubscription:Subscription;
   private onSelectionModifiedSubscription:Subscription;
 
-  // ------------------------------- image adding ------------------------------ 
+  // ------------------------------- image -------------------------------------- 
 
   addImageOnCanvas(url:string):void{
-    console.log(url);
     if (url) {
       fabric.Image.fromURL(url, (image) => {
         let scaleXFactor = (this.size.width - 50)/image.width;
         let scaleYFactor = (this.size.height - 50)/image.height;
-        console.log(image.width);
         image.set({
           left: 25,
           top: 25,
@@ -67,40 +66,54 @@ export class CanvasComponent implements OnInit {
     }
   }
 
-  // ------------------------------- image cloning ------------------------------ 
-
-  clone() {
-    let activeObject = this.canvas.getActiveObject(),
-      activeGroup = this.canvas.getActiveGroup();
-
-    if (activeObject) {
-      let clone;
-      switch (activeObject.type) {
-        case 'rect':
-          clone = new fabric.Rect(activeObject.toObject());
-          break;
-        case 'circle':
-          clone = new fabric.Circle(activeObject.toObject());
-          break;
-        case 'triangle':
-          clone = new fabric.Triangle(activeObject.toObject());
-          break;
-        case 'i-text':
-          clone = new fabric.IText('', activeObject.toObject());
-          break;
-        case 'image':
-          clone = fabric.util.object.clone(activeObject);
-          break;
-      }
-      if (clone) {
-        clone.set({ left: 10, top: 10 });
-        this.canvas.add(clone);
-        this.selectItemAfterAdded(clone);
-      }
+  applyFilterOnSingle(filterProps:any):void{
+    if(this.activeObjectType === 'image'){
+      const activeObject:any = this.activeObject;
+      activeObject.filters = this.getFilterArray(filterProps);
+      activeObject.applyFilters();
+      this.canvas.renderAll();
     }
   }
 
-  // ------------------------------- text adding ------------------------------
+  onSelectImage(imageObject):void{
+    console.log(imageObject.filters);
+    this.utilService.changeToolType('FILTER:SINGLE',{});
+  }
+
+  // ------------------------------- image cloning ------------------------------ 
+
+  // clone() {
+  //   let activeObject = this.canvas.getActiveObject(),
+  //     activeGroup = this.canvas.getActiveGroup();
+
+  //   if (activeObject) {
+  //     let clone;
+  //     switch (activeObject.type) {
+  //       case 'rect':
+  //         clone = new fabric.Rect(activeObject.toObject());
+  //         break;
+  //       case 'circle':
+  //         clone = new fabric.Circle(activeObject.toObject());
+  //         break;
+  //       case 'triangle':
+  //         clone = new fabric.Triangle(activeObject.toObject());
+  //         break;
+  //       case 'i-text':
+  //         clone = new fabric.IText('', activeObject.toObject());
+  //         break;
+  //       case 'image':
+  //         clone = fabric.util.object.clone(activeObject);
+  //         break;
+  //     }
+  //     if (clone) {
+  //       clone.set({ left: 10, top: 10 });
+  //       this.canvas.add(clone);
+  //       this.selectItemAfterAdded(clone);
+  //     }
+  //   }
+  // }
+
+  // ------------------------------- text -------------------------------------
 
   onAddText(textProps:object):void {
     const textObject = new fabric.IText(textProps['text'], {
@@ -187,7 +200,102 @@ export class CanvasComponent implements OnInit {
   }
 
   // ------------------------------- utility ----------------------------------
-
+  getFilterArray(filterProps:any):any[]{
+    let filterArray = [];
+    if(filterProps.brightness !== 0){
+      filterArray.push(
+        new fabric.Image.filters.Brightness({
+          brightness:filterProps.brightness
+        }
+      ));
+    }
+    if(filterProps.contrast !== 0){
+      filterArray.push(
+        new fabric.Image.filters.Contrast({
+          contrast:filterProps.contrast
+        }
+      ));
+    }
+    if(filterProps.saturation !== 0){
+      filterArray.push(
+        new fabric.Image.filters.Saturation({
+          saturation:filterProps.saturation
+        }
+      ));
+    }
+    if(filterProps.hue !== 0){
+      filterArray.push(
+        new fabric.Image.filters.HueRotation({
+          rotation:filterProps.hue
+        }
+      ));
+    }
+    if(filterProps.noise !== 0){
+      filterArray.push(
+        new fabric.Image.filters.Noise({
+          noise:filterProps.noise
+        }
+      ));
+    }
+    if(filterProps.blur !== 0){
+      filterArray.push(
+        new fabric.Image.filters.Blur({
+          blur:filterProps.blur
+        }
+      ));
+    }
+    if(filterProps.pixelate !== 0){
+      filterArray.push(
+        new fabric.Image.filters.Pixelate({
+          blocksize:filterProps.pixelate
+        }
+      ));
+    }
+    if(filterProps.sharpen){
+      filterArray.push(
+        new fabric.Image.filters.Convolute({
+          matrix: [ 0, -1,  0,
+                   -1,  5, -1,
+                    0, -1,  0 ]
+        }
+      ));
+    }
+    if(filterProps.emboss){
+      filterArray.push(
+        new fabric.Image.filters.Convolute({
+          matrix: [ 1,   1,  1,
+                    1, 0.7, -1,
+                   -1,  -1, -1 ]
+        }
+      ));
+    }
+    if(filterProps.grayscale){
+      filterArray.push(
+        new fabric.Image.filters.Grayscale({
+          mode:'lightness'
+        }
+      ));
+    }
+    if(filterProps.vintage){
+      filterArray.push(
+        new fabric.Image.filters.Vintage()
+      );
+    }
+    if(filterProps.sepia){
+      filterArray.push(
+        new fabric.Image.filters.Sepia()
+      );
+    }
+    if(filterProps.polaroid){
+      filterArray.push(
+        new fabric.Image.filters.Polaroid()
+      );
+    }
+    console.log(filterArray);
+    console.log(filterArray.length);
+    return filterArray;
+  }
+  
   selectItemAfterAdded(obj) {
     this.canvas.discardActiveObject();
     this.canvas.setActiveObject(obj).renderAll();
@@ -264,6 +372,21 @@ export class CanvasComponent implements OnInit {
     this.addTextSubscription = utilService.addTextToCanvas$.subscribe(
       textProps => {
         this.onAddText(textProps);
+      }
+    )
+    
+    this.addImageFilterSubscription = utilService.addImageFilter$.subscribe(
+      ({filterScope,filterProps})=>{
+        switch (filterScope) {
+          case 'SINGLE':
+            this.applyFilterOnSingle(filterProps);
+            break;
+          case 'ALL':
+            this.applyFilterOnSingle(filterProps);
+            break;
+          default:
+            break;
+        }
       }
     )
 
@@ -343,7 +466,8 @@ export class CanvasComponent implements OnInit {
               this.onSelectText(this.activeObject);
               break;
             case 'image':
-              //call function for image selection
+              this.toolType = 'FILTER'
+              this.onSelectImage(this.activeObject);
               break;        
             default:
               break;
@@ -369,7 +493,8 @@ export class CanvasComponent implements OnInit {
               this.onSelectText(this.activeObject);
               break;
             case 'image':
-              //call function for image selection
+              this.toolType = 'FILTER'
+              this.onSelectImage(this.activeObject);
               break;        
             default:
               break;

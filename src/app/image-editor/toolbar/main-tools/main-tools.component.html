@@ -11,7 +11,7 @@
   <mat-grid-tile (click)="onChangeToolType('TEXT')">
     <button mat-icon-button><i class="material-icons icons">text_fields</i></button>
   </mat-grid-tile>
-  <mat-grid-tile>
-    <button mat-icon-button><i class="material-icons icons">photo_filter</i></button>
+  <mat-grid-tile (click)="onChangeToolType('FILTER:ALL')">
+    <button mat-icon-button><i class="material-icons icons">format_painter</i></button>
   </mat-grid-tile>
 </mat-grid-list>

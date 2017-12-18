@@ -15,9 +15,11 @@ export class ToolbarComponent implements OnInit {
     'MAIN',
     'TEXT',
     'TEXT:EDITING',
+    'TEXT:EDITING-ADVANCED',
     'CROP',
     'PREVIEW',
-    'FILTER'
+    'FILTER:ALL',
+    'FILTER:SINGLE'
   ];
   private selectedToolType:string;
   private activeObjectProps:any;
