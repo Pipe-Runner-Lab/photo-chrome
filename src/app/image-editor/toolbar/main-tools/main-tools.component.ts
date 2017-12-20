@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import {UtilService} from '../../util.service';
 
 @Component({
@@ -8,12 +8,14 @@ import {UtilService} from '../../util.service';
 })
 export class MainToolsComponent implements OnInit {
 
+  @Input() selectedToolType;
+
   onChangeToolType(toolType:string):void{
     this.utilService.changeToolType(toolType,{});
   }
 
   onchangeToolTypeToGlobal(toolType:string):void{
-    this.utilService.getGlobalData(toolType);
+    this.utilService.globalCommand(toolType);
   }
 
   constructor(private utilService: UtilService) { }

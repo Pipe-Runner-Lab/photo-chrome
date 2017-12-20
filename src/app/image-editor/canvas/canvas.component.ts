@@ -71,7 +71,7 @@ export class CanvasComponent implements OnInit {
   private onUpdateTextSubscription:Subscription;
   private windowResizeSubscription:Subscription;
   private onSelectionModifiedSubscription:Subscription;
-  private getGlobalDataSubscription:Subscription;
+  private globalCommandSubscription:Subscription;
 
   // ------------------------------- image -------------------------------------- 
 
@@ -527,7 +527,7 @@ export class CanvasComponent implements OnInit {
       }
     )
 
-    this.getGlobalDataSubscription = utilService.getGlobalData$.subscribe(
+    this.globalCommandSubscription = utilService.globalCommand$.subscribe(
       (toolType) => {
         switch (toolType) {
           case 'FILTER:ALL':
@@ -536,6 +536,10 @@ export class CanvasComponent implements OnInit {
             break;
           case 'TEXT':
             this.onAddText(this.defaultTextProps);
+            break;
+          case 'CLEANSELECT':
+            this.cleanSelect();
+            break;
           default:
             break;
         }
@@ -586,7 +590,8 @@ export class CanvasComponent implements OnInit {
 
         if(this.activeObjectType === 'group'){
           this.activeObjectList = activeObjectSelection.activeObjectList;
-          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+          this.utilService.onSelectionCreated(this.activeObjectList,this.activeObjectType,{});
+          this.utilService.changeToolType('DEACTIVATE',{});
         }
         else{
           this.activeObject = activeObjectSelection.activeObject;
@@ -613,7 +618,8 @@ export class CanvasComponent implements OnInit {
 
         if(this.activeObjectType === 'group'){
           this.activeObjectList = activeObjectSelection.activeObjectList;
-          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+          this.utilService.onSelectionCreated(this.activeObjectList,this.activeObjectType,{});
+          this.utilService.changeToolType('DEACTIVATE',{});
         }
         else{
           this.activeObject = activeObjectSelection.activeObject;
@@ -683,7 +689,7 @@ export class CanvasComponent implements OnInit {
     this.onUpdateTextSubscription.unsubscribe();
     this.windowResizeSubscription.unsubscribe();
     this.onSelectionModifiedSubscription.unsubscribe();
-    this.getGlobalDataSubscription.unsubscribe();
+    this.globalCommandSubscription.unsubscribe();
   }
 
 }

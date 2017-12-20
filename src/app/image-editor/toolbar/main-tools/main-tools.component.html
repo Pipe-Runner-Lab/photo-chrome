@@ -1,17 +1,17 @@
 <mat-grid-list cols="3" rowHeight="52px">
   <mat-grid-tile>
-    <button mat-icon-button><i class="material-icons icons">crop</i></button>
+    <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">crop</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button><i class="material-icons icons">zoom_out_map</i></button>
+    <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_out_map</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button><i class="material-icons icons">zoom_in</i></button>
+    <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_in</i></button>
   </mat-grid-tile>
   <mat-grid-tile (click)="onchangeToolTypeToGlobal('TEXT')">
-    <button mat-icon-button><i class="material-icons icons">text_fields</i></button>
+    <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">text_fields</i></button>
   </mat-grid-tile>
   <mat-grid-tile (click)="onchangeToolTypeToGlobal('FILTER:ALL')">
-    <button mat-icon-button><i class="material-icons icons">format_painter</i></button>
+    <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_painter</i></button>
   </mat-grid-tile>
 </mat-grid-list>

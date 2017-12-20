@@ -19,17 +19,25 @@ export class ToolbarComponent implements OnInit {
     'CROP',
     'PREVIEW',
     'FILTER:ALL',
-    'FILTER:SINGLE'
+    'FILTER:SINGLE',
+    'DEACTIVATE'
   ];
   private selectedToolType:string;
   private activeObjectProps:any;
+  private selection:any;
 
   // ---------------------------- Subscription ------------------------------
   private onChangeToolTypeSubscription:Subscription;
+  private onSelectionCreatedSubscription:Subscription;
 
   onChangeToolType(toolType:string):void {
     this.selectedToolType = toolType;
     // clear other values here
+  }
+
+  cleanSelect(){
+    this.utilService.globalCommand('CLEANSELECT');
+    this.onChangeToolType('MAIN');
   }
 
   constructor(private utilService:UtilService) {
@@ -42,9 +50,19 @@ export class ToolbarComponent implements OnInit {
           this.onChangeToolType(toolType);
         }
       )
+      this.onSelectionCreatedSubscription = utilService.onSelectionCreated$.subscribe(
+        ({selection}) => {
+          this.selection = selection;
+        }
+      )
    }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy(){
+    this.onChangeToolTypeSubscription.unsubscribe();
+    this.onSelectionCreatedSubscription.unsubscribe();
   }
 
 }

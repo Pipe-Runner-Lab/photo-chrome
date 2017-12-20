@@ -73,7 +73,7 @@
   <!-- pixelate amount -->
   <div class="picker-container">
     <button mat-icon-button matTooltip="Pixelate" matTooltipPosition="above" (click)="onSetToDefault('pixelate')" [disabled]="filterValues['pixelate']===0">
-    <i class="material-icons" [ngClass]="{'icons':filterValues['pixelate']!==0}">view_module</i>
+    <i class="material-icons" [ngClass]="{'icons':filterValues['pixelate']!==0}">view_comfy</i>
   </button>
     <div class="slider-wrapper">
       <mat-slider min="0" step="1" max="20" [(ngModel)]="filterValues['pixelate']" (change)="onFilterUpdate()" class="slider"></mat-slider>

@@ -68,4 +68,8 @@ export class ImagePickerComponent implements OnInit {
     this.fileInputElement = document.getElementById('upload-file-input');
   }
 
+  ngOnDestroy(){
+    this.onSelectionCreatedSubscription.unsubscribe();
+  }
+
 }

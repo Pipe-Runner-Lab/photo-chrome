@@ -20,6 +20,10 @@
   color: #dddbdb;
 }
 
+.active-icon {
+  color: #69f0ae;
+}
+
 .spacer {
   flex: 1;
 }
