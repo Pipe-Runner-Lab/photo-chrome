@@ -28,8 +28,6 @@
   height: 95%;
   position: relative;
   z-index: 9;
-  display: flex;
-  flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -37,19 +35,18 @@
 .thumbnail-wrapper {
   position: relative;
   z-index: 8;
-  width: calc(100%-16px);
-  margin: 0px 8px 8px 8px;
-  border: 1px solid #8d8c8c;
-}
-
-.thumbnail-wrapper:hover {
-  border: 1px solid #bd40ee;
+  display: inline-block;
+  width: calc(49% - 8px);
+  margin: 0px 4px 4px 4px;
 }
 
 .thumbnail {
   width: 100%;
+  height: 100%;
+  border: 1px solid #8d8c8c;
 }
 
 .thumbnail:hover {
   cursor: pointer;
+  border: 1px solid #bd40ee;
 }
