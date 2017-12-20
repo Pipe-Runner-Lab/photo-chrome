@@ -22,16 +22,12 @@ export class ImagePickerComponent implements OnInit {
   }
 
   onUpload(event:any):void {
-    if (event.target.files) {
-
-      var reader = new FileReader();
-
-      reader.onload = (event) => {
-        this.fileUrlList = [...this.fileUrlList,event.target['result']];
-      }
-
+    if (event.target.files) {  
       for( let i = 0, file; file = event.target.files[i]; i++ ){
-        // unable to load multiple files.. probably getting re rendered
+        var reader = new FileReader();        
+        reader.onload = (event) => {
+          this.fileUrlList = [...this.fileUrlList,event.target['result']];
+        }
         reader.readAsDataURL(file)
       }
     }
