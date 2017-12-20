@@ -35,6 +35,35 @@ export class FilterToolsComponent implements OnInit {
     this.utilService.addImageFilter(this.filterScope,this.filterValues);
   }
 
+  onSetToDefault(filterType:string):void{
+    switch (filterType) {
+      case 'brightness':
+        this.filterValues = {...this.filterValues,brightness:0};
+        break;
+      case 'contrast':
+        this.filterValues = {...this.filterValues,contrast:0};
+        break;
+      case 'saturation':
+        this.filterValues = {...this.filterValues,saturation:0};
+        break;
+      case 'hue':
+        this.filterValues = {...this.filterValues,hue:0};
+        break;
+      case 'noise':
+        this.filterValues = {...this.filterValues,noise:0};
+        break;
+      case 'blur':
+        this.filterValues = {...this.filterValues,blur:0};
+        break;
+      case 'pixelate':
+        this.filterValues = {...this.filterValues,pixelate:0};
+        break;
+      default:
+        break;
+    }
+    this.onFilterUpdate();
+  }
+
   constructor(private utilService:UtilService) {
     this.panelType = 'ADVANCED';
     this.filterValues = {

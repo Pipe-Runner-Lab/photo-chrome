@@ -11,7 +11,7 @@ export class TextToolsComponent implements OnInit {
   @Input() selectedToolType;
   @Input() activeObjectProps;
 
-  private text:string;
+  // private text:string;
   private color:string;
   private opacity:number;
   private fontFamily:string;
@@ -24,20 +24,20 @@ export class TextToolsComponent implements OnInit {
   private lineHeight:number;
   private charSpacing:number;
 
-  addTextToCanvas():void{
-    this.utilService.addTextToCanvas({
-      text:this.text,
-      color: this.color,
-      opacity: this.opacity,
-      fontFamily:this.fontFamily,
-      fontSize:this.fontSize,
-      fontWeight:this.fontWeight,
-      fontStyle:this.fontStyle,
-      textAlign:this.textAlign,
-      underline:this.underline,
-      linethrough:this.linethrough
-    })
-  }
+  // addTextToCanvas():void{
+  //   this.utilService.addTextToCanvas({
+  //     text:this.text,
+  //     color: this.color,
+  //     opacity: this.opacity,
+  //     fontFamily:this.fontFamily,
+  //     fontSize:this.fontSize,
+  //     fontWeight:this.fontWeight,
+  //     fontStyle:this.fontStyle,
+  //     textAlign:this.textAlign,
+  //     underline:this.underline,
+  //     linethrough:this.linethrough
+  //   })
+  // }
 
   onUpdateText():void{
     if(this.selectedToolType === 'TEXT:EDITING'){
@@ -74,37 +74,30 @@ export class TextToolsComponent implements OnInit {
   
   toggleBold():void{
     this.fontWeight = this.fontWeight === 'normal'? 'bold' : 'normal';
+    this.onUpdateText();
   }
 
   toggleItalic():void{
     this.fontStyle = this.fontStyle === 'normal'? 'italic' : 'normal';
+    this.onUpdateText();
   }
 
   toggleUnderline():void{
     this.underline = !this.underline;
+    this.onUpdateText();
   }
 
   toggleLinethrough():void{
     this.linethrough = !this.linethrough;
+    this.onUpdateText();
   }
 
   setTextAlign(alignment):void{
     this.textAlign = alignment;
+    this.onUpdateText();
   }
 
   constructor(private utilService:UtilService) { 
-    this.text = 'Sample Text';
-    this.color = '#ffffff';
-    this.opacity = 1;
-    this.fontFamily = 'helvetica';
-    this.fontSize = 24;
-    this.fontWeight = 'normal';
-    this.fontStyle = 'normal';
-    this.underline = false;
-    this.linethrough = false;
-    this.textAlign = 'left';
-    this.lineHeight = 1.6;
-    this.charSpacing = 0;
   }
 
   ngOnInit() {

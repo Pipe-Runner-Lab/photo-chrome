@@ -39,6 +39,20 @@ export class CanvasComponent implements OnInit {
     sepia:false,
     polaroid:false
   };
+  private defaultTextProps = {
+    text:'Sample Text',
+    color:'#000000',
+    opacity:1,
+    fontFamily:'helvetica',
+    fontSize:24,
+    fontWeight:'normal',
+    fontStyle:'normal',
+    underline:false,
+    linethrough:false,
+    textAlign:'left',
+    lineHeight:1.6,
+    charSpacing:0
+  }
 
   private textString: string;
   private url: string = '';
@@ -517,9 +531,11 @@ export class CanvasComponent implements OnInit {
       (toolType) => {
         switch (toolType) {
           case 'FILTER:ALL':
+            this.cleanSelect();
             this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues)
             break;
-        
+          case 'TEXT':
+            this.onAddText(this.defaultTextProps);
           default:
             break;
         }
@@ -553,7 +569,7 @@ export class CanvasComponent implements OnInit {
 
     // Initializing backend
     var webglBackend = new fabric.WebglFilterBackend();
-    var canvas2dBackend = new fabric.Canvas2dFilterBackend()
+    // var canvas2dBackend = new fabric.Canvas2dFilterBackend()
     fabric.filterBackend = fabric.initFilterBackend();
     fabric.filterBackend = webglBackend;
 
@@ -661,8 +677,8 @@ export class CanvasComponent implements OnInit {
 
   ngOnDestroy(){
     this.canvas.off();
-
     this.addImageSubscription.unsubscribe();
+    this.addImageFilterSubscription.unsubscribe();
     this.addTextSubscription.unsubscribe();
     this.onUpdateTextSubscription.unsubscribe();
     this.windowResizeSubscription.unsubscribe();

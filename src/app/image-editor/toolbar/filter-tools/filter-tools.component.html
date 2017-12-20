@@ -12,78 +12,71 @@
 <div *ngIf="panelType==='ADVANCED'" class="panel-container">
   <!-- brightness amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">brightness_medium</i>
-    </div>
+    <button mat-icon-button matTooltip="Brightness" matTooltipPosition="above" (click)="onSetToDefault('brightness')" [disabled]="filterValues['brightness']===0">
+      <i class="material-icons" [ngClass]="{'icons':filterValues['brightness']!==0}">brightness_medium</i>
+    </button>
     <div class="slider-wrapper">
-      <mat-slider min="-1" step="0.005" max="1" thumb-label="true" [(ngModel)]="filterValues['brightness']" (change)="onFilterUpdate()"
-        class="slider "></mat-slider>
+      <mat-slider min="-0.5" step="0.05" max="0.5" [(ngModel)]="filterValues['brightness']" (change)="onFilterUpdate()" class="slider "></mat-slider>
     </div>
   </div>
 
   <!-- contrast amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">brightness_2</i>
-    </div>
+    <button mat-icon-button matTooltip="Contrast" matTooltipPosition="above" (click)="onSetToDefault('contrast')" [disabled]="filterValues['contrast']===0">
+    <i class="material-icons" [ngClass]="{'icons':filterValues['contrast']!==0}">brightness_2</i>
+  </button>
     <div class="slider-wrapper">
-      <mat-slider min="-1" step="0.005" max="1" thumb-label="true" [(ngModel)]="filterValues['contrast']" (change)="onFilterUpdate()"
-        class="slider "></mat-slider>
+      <mat-slider min="-0.5" step="0.05" max="0.5" [(ngModel)]="filterValues['contrast']" (change)="onFilterUpdate()" class="slider "></mat-slider>
     </div>
   </div>
 
   <!-- saturation amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">invert_colors</i>
-    </div>
+    <button mat-icon-button matTooltip="Saturation" matTooltipPosition="above" (click)="onSetToDefault('saturation')" [disabled]="filterValues['saturation']===0">
+    <i class="material-icons" [ngClass]="{'icons':filterValues['saturation']!==0}">invert_colors</i>
+  </button>
     <div class="slider-wrapper">
-      <mat-slider min="-1" step="0.005" max="1" thumb-label="true" [(ngModel)]="filterValues['saturation']" (change)="onFilterUpdate()"
-        class="slider "></mat-slider>
+      <mat-slider min="-1" step="0.05" max="1" [(ngModel)]="filterValues['saturation']" (change)="onFilterUpdate()" class="slider "></mat-slider>
     </div>
   </div>
 
   <!-- Hue amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">colorize</i>
-    </div>
+    <button mat-icon-button matTooltip="Hue" matTooltipPosition="above" (click)="onSetToDefault('hue')" [disabled]="filterValues['hue']===0">
+    <i class="material-icons" [ngClass]="{'icons':filterValues['hue']!==0}">colorize</i>
+  </button>
     <div class="slider-wrapper">
-      <mat-slider min="-2" step="0.002" max="2" thumb-label="true" [(ngModel)]="filterValues['hue']" (change)="onFilterUpdate()"
-        class="slider"></mat-slider>
+      <mat-slider min="-2" step="0.002" max="2" [(ngModel)]="filterValues['hue']" (change)="onFilterUpdate()" class="slider"></mat-slider>
     </div>
   </div>
 
   <!-- Noise amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">graphic_eq</i>
-    </div>
+    <button mat-icon-button matTooltip="Noise" matTooltipPosition="above" (click)="onSetToDefault('noise')" [disabled]="filterValues['noise']===0">
+    <i class="material-icons" [ngClass]="{'icons':filterValues['noise']!==0}">graphic_eq</i>
+  </button>
     <div class="slider-wrapper">
-      <mat-slider min="0" step="1" max="1000" thumb-label="true" [(ngModel)]="filterValues['noise']" (change)="onFilterUpdate()"
-        class="slider"></mat-slider>
+      <mat-slider min="0" step="1" max="1000" [(ngModel)]="filterValues['noise']" (change)="onFilterUpdate()" class="slider"></mat-slider>
     </div>
   </div>
 
   <!-- blur amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">blur_circular</i>
-    </div>
+    <button mat-icon-button matTooltip="Blur" matTooltipPosition="above" (click)="onSetToDefault('blur')" [disabled]="filterValues['blur']===0">
+    <i class="material-icons" [ngClass]="{'icons':filterValues['blur']!==0}">blur_circular</i>
+  </button>
     <div class="slider-wrapper">
-      <mat-slider min="0" step="0.01" max="1" thumb-label="true" [(ngModel)]="filterValues['blur']" (change)="onFilterUpdate()"
-        class="slider"></mat-slider>
+      <mat-slider min="0" step="0.01" max="1" [(ngModel)]="filterValues['blur']" (change)="onFilterUpdate()" class="slider"></mat-slider>
     </div>
   </div>
 
   <!-- pixelate amount -->
   <div class="picker-container">
-    <div class="non-interactive-icon-wrapper">
-      <i class="material-icons icons">view_module</i>
-    </div>
+    <button mat-icon-button matTooltip="Pixelate" matTooltipPosition="above" (click)="onSetToDefault('pixelate')" [disabled]="filterValues['pixelate']===0">
+    <i class="material-icons" [ngClass]="{'icons':filterValues['pixelate']!==0}">view_module</i>
+  </button>
     <div class="slider-wrapper">
-      <mat-slider min="0" step="1" max="20" thumb-label="true" [(ngModel)]="filterValues['pixelate']" (change)="onFilterUpdate()"
-        class="slider"></mat-slider>
+      <mat-slider min="0" step="1" max="20" [(ngModel)]="filterValues['pixelate']" (change)="onFilterUpdate()" class="slider"></mat-slider>
     </div>
   </div>
 
