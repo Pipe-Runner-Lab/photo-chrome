@@ -5,6 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/throttleTime';
+import 'rxjs/add/operator/filter';
 
 declare const fabric: any;
 
@@ -23,6 +24,21 @@ export class CanvasComponent implements OnInit {
 
   private screenReductionFactor:number = 180;
   private aspectRatioList: number[] = [(6/6),(8/6),(7/5),(6/4)]
+  private globalFilterValues = {
+    brightness:0,
+    contrast:0,
+    saturation:0,
+    hue:0,
+    noise:0,
+    blur:0,
+    pixelate:0,
+    sharpen:false,
+    emboss:false,
+    grayscale:false,
+    vintage:false,
+    sepia:false,
+    polaroid:false
+  };
 
   private textString: string;
   private url: string = '';
@@ -41,6 +57,7 @@ export class CanvasComponent implements OnInit {
   private onUpdateTextSubscription:Subscription;
   private windowResizeSubscription:Subscription;
   private onSelectionModifiedSubscription:Subscription;
+  private getGlobalDataSubscription:Subscription;
 
   // ------------------------------- image -------------------------------------- 
 
@@ -69,15 +86,27 @@ export class CanvasComponent implements OnInit {
   applyFilterOnSingle(filterProps:any):void{
     if(this.activeObjectType === 'image'){
       const activeObject:any = this.activeObject;
-      activeObject.filters = this.getFilterArray(filterProps);
+      activeObject.filters = this.generateFilterArray(filterProps);
       activeObject.applyFilters();
       this.canvas.renderAll();
     }
   }
 
+  applyFilterOnAll(filterProps:any):void{
+    this.globalFilterValues = filterProps;
+    const globalFilter = this.generateFilterArray(filterProps);
+    this.canvas.forEachObject((object)=>{
+      console.log('worked');
+      if(object.type === 'image'){
+        object.filters = globalFilter;
+        object.applyFilters();
+      }
+    })
+    this.canvas.renderAll();
+  }
+
   onSelectImage(imageObject):void{
-    console.log(imageObject.filters);
-    this.utilService.changeToolType('FILTER:SINGLE',{});
+    this.utilService.changeToolType('FILTER:SINGLE',this.getActiveFilter(imageObject));
   }
 
   // ------------------------------- image cloning ------------------------------ 
@@ -200,7 +229,75 @@ export class CanvasComponent implements OnInit {
   }
 
   // ------------------------------- utility ----------------------------------
-  getFilterArray(filterProps:any):any[]{
+  getActiveFilter(imageObject){
+    console.log(imageObject.filters);
+    let activeFilter = {
+      brightness:0,
+      contrast:0,
+      saturation:0,
+      hue:0,
+      noise:0,
+      blur:0,
+      pixelate:0,
+      sharpen:false,
+      emboss:false,
+      grayscale:false,
+      vintage:false,
+      sepia:false,
+      polaroid:false
+    };
+    imageObject.filters.map((filter)=>{
+      switch (filter.type) {
+        case 'Brightness':
+          activeFilter = {...activeFilter,brightness:filter.brightness}  
+          break;
+        case 'Contrast':
+          activeFilter = {...activeFilter,contrast:filter.contrast}  
+          break;
+        case 'Saturation':
+          activeFilter = {...activeFilter,saturation:filter.saturation}  
+          break;
+        case 'HueRotation':
+          activeFilter = {...activeFilter,hue:filter.rotation}  
+          break;
+        case 'Noise':
+          activeFilter = {...activeFilter,noise:filter.noise}  
+          break;
+        case 'Blur':
+          activeFilter = {...activeFilter,blur:filter.blur}  
+          break;
+        case 'Pixelate':
+          activeFilter = {...activeFilter,pixelate:filter.blocksize}  
+          break;
+        case 'Grayscale':
+          activeFilter = {...activeFilter,grayscale:true}  
+          break;
+        case 'Vintage':
+          activeFilter = {...activeFilter,vintage:true}  
+          break;
+        case 'Sepia':
+          activeFilter = {...activeFilter,sepia:true}  
+          break;
+        case 'Polaroid':
+          activeFilter = {...activeFilter,polaroid:true}  
+          break;
+        case 'Convolute':
+          if(filter.matrix === [ 0, -1,  0, -1,  5, -1, 0, -1,  0 ]){
+            activeFilter = {...activeFilter,sharpen:true}; 
+            
+          }
+          if(filter.matrix === [ 1,   1,  1, 1, 0.7, -1, -1,  -1, -1 ]){
+            activeFilter = {...activeFilter,emboss:true};          
+          }
+          break;         
+        default:
+        break;
+      }
+    })
+    return activeFilter;
+  }
+
+  generateFilterArray(filterProps:any):any[]{
     let filterArray = [];
     if(filterProps.brightness !== 0){
       filterArray.push(
@@ -291,8 +388,6 @@ export class CanvasComponent implements OnInit {
         new fabric.Image.filters.Polaroid()
       );
     }
-    console.log(filterArray);
-    console.log(filterArray.length);
     return filterArray;
   }
   
@@ -382,7 +477,7 @@ export class CanvasComponent implements OnInit {
             this.applyFilterOnSingle(filterProps);
             break;
           case 'ALL':
-            this.applyFilterOnSingle(filterProps);
+            this.applyFilterOnAll(filterProps);
             break;
           default:
             break;
@@ -418,7 +513,20 @@ export class CanvasComponent implements OnInit {
       }
     )
 
-    this.windowResizeSubscription = Observable.fromEvent(window,'resize').throttleTime(250).subscribe(
+    this.getGlobalDataSubscription = utilService.getGlobalData$.subscribe(
+      (toolType) => {
+        switch (toolType) {
+          case 'FILTER:ALL':
+            this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues)
+            break;
+        
+          default:
+            break;
+        }
+      }
+    )
+
+    this.windowResizeSubscription = Observable.fromEvent(window,'resize').filter(()=>(window.innerHeight>720)).throttleTime(100).subscribe(
       ()=>{
           this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
           this.size.width = Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[1]);
@@ -441,7 +549,13 @@ export class CanvasComponent implements OnInit {
       selection: true,
       selectionBorderColor: '#B3E5FC',
       backgroundColor:'#ffffff'
-    }); 
+    });
+
+    // Initializing backend
+    var webglBackend = new fabric.WebglFilterBackend();
+    var canvas2dBackend = new fabric.Canvas2dFilterBackend()
+    fabric.filterBackend = fabric.initFilterBackend();
+    fabric.filterBackend = webglBackend;
 
     // Default size of canvas
     this.canvas.setWidth(this.size.width);
@@ -530,7 +644,7 @@ export class CanvasComponent implements OnInit {
         this.activeObjectType = '';
         this.activeObject = undefined;
         this.activeObjectList = [];
-        this.utilService.changeToolType(this.toolType,this.activeObject);
+        this.utilService.changeToolType(this.toolType,undefined);
       },
       'text:selection:changed':(event)=>{
         // using preselected text object to optimize
@@ -553,6 +667,7 @@ export class CanvasComponent implements OnInit {
     this.onUpdateTextSubscription.unsubscribe();
     this.windowResizeSubscription.unsubscribe();
     this.onSelectionModifiedSubscription.unsubscribe();
+    this.getGlobalDataSubscription.unsubscribe();
   }
 
 }

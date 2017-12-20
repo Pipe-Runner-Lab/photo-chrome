@@ -7,17 +7,12 @@ import {UtilService} from '../../util.service';
   styleUrls: ['./filter-tools.component.css']
 })
 export class FilterToolsComponent implements OnInit {
-  // sharpen
-  // emboss
-  // graysacle
-  // Vintage
-  // Sepia
-  // Poloroid
+
   @Input() selectedToolType;
+  @Input() activeObjectProps;
 
   private filterScope:string;
   private panelType:string;
-  // private globalFilterValues:any; need to put this somewhere
   private filterValues:any;
 
   onPanelChange(panelType:string):void{
@@ -26,7 +21,9 @@ export class FilterToolsComponent implements OnInit {
 
   toggleScope(filterScope){
     this.filterScope = filterScope;
-    // fire event to chage scope of canvas
+    if(this.filterScope === 'ALL'){
+      this.utilService.getGlobalData('FILTER:ALL');
+    }
   }
 
   togglePreset(presetType):void{
@@ -59,6 +56,8 @@ export class FilterToolsComponent implements OnInit {
 
   ngOnInit() {
     this.filterScope = this.filterScope;
+    console.log(this.filterValues);
+    this.filterValues = this.activeObjectProps;
   }
 
   ngOnChanges(){
@@ -69,7 +68,6 @@ export class FilterToolsComponent implements OnInit {
       this.filterScope = 'SINGLE'
     }
 
-    console.log(this.filterScope);
-    
+    this.filterValues = this.activeObjectProps;
   }
 }

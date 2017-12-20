@@ -62,4 +62,10 @@ export class UtilService {
     this.onSelectionModifiedSource.next(modificationType);
   }
 
+  //------------------------ Get global --------------------------------------
+  private getGlobalDataSource = new Subject<any>();
+  getGlobalData$ = this.getGlobalDataSource.asObservable();
+  getGlobalData = (toolType) => {
+    this.getGlobalDataSource.next(toolType);
+  }
 }
