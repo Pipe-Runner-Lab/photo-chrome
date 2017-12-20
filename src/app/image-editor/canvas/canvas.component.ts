@@ -78,15 +78,14 @@ export class CanvasComponent implements OnInit {
   addImageOnCanvas(url:string):void{
     if (url) {
       fabric.Image.fromURL(url, (image) => {
-        let scaleXFactor = (this.size.width - 50)/image.width;
-        let scaleYFactor = (this.size.height - 50)/image.height;
+        let scaleXFactor = (this.size.width - 20)/image.width;
+        let scaleYFactor = scaleXFactor;
         image.set({
-          left: 25,
-          top: 25,
+          left: 10,
+          top: 10,
           scaleX: scaleXFactor,
           scaleY: scaleYFactor,
           angle: 0,
-          padding: 10,
           cornersize: 10,
           hasRotatingPoint: true
         });
