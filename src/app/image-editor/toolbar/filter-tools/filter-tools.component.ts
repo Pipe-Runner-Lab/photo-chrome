@@ -22,7 +22,7 @@ export class FilterToolsComponent implements OnInit {
   toggleScope(filterScope){
     this.filterScope = filterScope;
     if(this.filterScope === 'ALL'){
-      this.utilService.globalCommand('FILTER:ALL');
+      this.utilService.canvasCommand('FILTER:ALL');
     }
   }
 
@@ -65,22 +65,7 @@ export class FilterToolsComponent implements OnInit {
   }
 
   constructor(private utilService:UtilService) {
-    this.panelType = 'ADVANCED';
-    this.filterValues = {
-      brightness:0,
-      contrast:0,
-      saturation:0,
-      hue:0,
-      noise:0,
-      blur:0,
-      pixelate:0,
-      sharpen:false,
-      emboss:false,
-      grayscale:false,
-      vintage:false,
-      sepia:false,
-      polaroid:false
-    };
+    this.panelType = 'PRESET';
   }
 
   ngOnInit() {

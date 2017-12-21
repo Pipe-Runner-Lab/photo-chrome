@@ -32,12 +32,12 @@
 
 .text-field-container {
   width: 100%;
-  margin: 4px 0px 0px 0px;
+  margin: 16px 0px 8px 0px;
 }
 
 .text-field {
-  width: calc(100% - 16px);
-  margin: 0px 8px 0px 8px;
+  width: calc(100% - 32px);
+  margin: 0px 16px 0px 16px;
   color: #eeeeee;
 }
 

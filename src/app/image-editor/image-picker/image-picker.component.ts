@@ -44,7 +44,7 @@ export class ImagePickerComponent implements OnInit {
   }
 
   onRemoveObjectFromCanvas(){
-    this.utilService.onSelectionModified('DELETE');
+    this.utilService.canvasCommand('DELETE');
   }
 
   addImageOnCanvas(url:string):void{

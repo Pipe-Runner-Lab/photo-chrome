@@ -8,10 +8,10 @@
   <mat-grid-tile>
     <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_in</i></button>
   </mat-grid-tile>
-  <mat-grid-tile (click)="onchangeToolTypeToGlobal('TEXT')">
+  <mat-grid-tile (click)="canvasCommand('ADD_TEXT')">
     <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">text_fields</i></button>
   </mat-grid-tile>
-  <mat-grid-tile (click)="onchangeToolTypeToGlobal('FILTER:ALL')">
+  <mat-grid-tile (click)="canvasCommand('FILTER:ALL')">
     <button mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_painter</i></button>
   </mat-grid-tile>
 </mat-grid-list>

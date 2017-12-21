@@ -1,3 +1,12 @@
+<!-- Font style -->
+<div class="text-field-container">
+  <mat-select class="text-field" placeholder="Font family" [(value)]="fontFamily" (change)="onUpdateText()" disableRipple>
+    <mat-option *ngFor="let font of fontList" [value]="font">
+      {{ font }}
+    </mat-option>
+  </mat-select>
+</div>
+
 <!-- text styling -->
 <mat-grid-list class="style-container" cols="4" rowHeight="48px">
   <mat-grid-tile>
@@ -15,7 +24,7 @@
 </mat-grid-list>
 
 <!-- text align -->
-<mat-grid-list *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" class="style-container" cols="4" rowHeight="48px">
+<mat-grid-list *ngIf="selectedToolType!=='TEXT:EDITING'" class="style-container" cols="4" rowHeight="48px">
   <mat-grid-tile>
     <button mat-icon-button (click)="setTextAlign('left')"><i [ngClass]="{'active-icon':textAlign==='left'}" class="material-icons icons">format_align_left</i></button>
   </mat-grid-tile>
@@ -37,7 +46,7 @@
   <i [style.color]="color " class="material-icons icons">color_lens</i>
   </button>
   <div class="slider-wrapper">
-    <mat-slider *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="opacity"
+    <mat-slider *ngIf="selectedToolType!=='TEXT:EDITING'" min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="opacity"
       (change)="onUpdateText()" class="slider"></mat-slider>
   </div>
 </div>
@@ -53,7 +62,7 @@
 </div>
 
 <!-- line height picker -->
-<div *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" class="picker-container">
+<div *ngIf="selectedToolType!=='TEXT:EDITING'" class="picker-container">
   <div class="non-interactive-icon-wrapper">
     <i class="material-icons icons">format_line_spacing</i>
   </div>
@@ -63,7 +72,7 @@
 </div>
 
 <!-- char spacing picker
-<div *ngIf="selectedToolType!=='TEXT:EDITING-ADVANCED'" class="picker-container">
+<div *ngIf="selectedToolType!=='TEXT:EDITING'" class="picker-container">
   <div class="non-interactive-icon-wrapper">
     <i class="material-icons icons">space_bar</i>
   </div>

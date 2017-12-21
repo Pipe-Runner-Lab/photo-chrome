@@ -14,8 +14,8 @@ export class MainToolsComponent implements OnInit {
     this.utilService.changeToolType(toolType,{});
   }
 
-  onchangeToolTypeToGlobal(toolType:string):void{
-    this.utilService.globalCommand(toolType);
+  canvasCommand(toolType:string):void{
+    this.utilService.canvasCommand(toolType);
   }
 
   constructor(private utilService: UtilService) { }

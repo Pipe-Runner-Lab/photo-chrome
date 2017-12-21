@@ -22,8 +22,11 @@ export class CanvasComponent implements OnInit {
   private activeObject: any;
   private activeObjectList: any;
 
+  // Editor properties
   private screenReductionFactor:number = 180;
   private aspectRatioList: number[] = [(6/6),(8/6),(7/5),(6/4)]
+
+  // Global Scope Tool values
   private globalFilterValues = {
     brightness:0,
     contrast:0,
@@ -39,11 +42,13 @@ export class CanvasComponent implements OnInit {
     sepia:false,
     polaroid:false
   };
+
+  // Tool default values
   private defaultTextProps = {
     text:'Sample Text',
     color:'#000000',
     opacity:1,
-    fontFamily:'helvetica',
+    fontFamily:'Roboto',
     fontSize:24,
     fontWeight:'normal',
     fontStyle:'normal',
@@ -54,8 +59,7 @@ export class CanvasComponent implements OnInit {
     charSpacing:0
   }
 
-  private textString: string;
-  private url: string = '';
+  // canvas size preperty
   private size: any = {
     height: Math.round(window.innerHeight - this.screenReductionFactor),
     width: Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[3]),
@@ -65,15 +69,19 @@ export class CanvasComponent implements OnInit {
   // private selected: any;
 
   // ------------------------------- subscribtion ------------------------------
+  private windowResizeSubscription:Subscription;
   private addImageSubscription:Subscription;
   private addImageFilterSubscription:Subscription;
   private addTextSubscription:Subscription;
   private onUpdateTextSubscription:Subscription;
-  private windowResizeSubscription:Subscription;
   private onSelectionModifiedSubscription:Subscription;
-  private globalCommandSubscription:Subscription;
+  private canvasCommandSubscription:Subscription;
 
   // ------------------------------- image -------------------------------------- 
+
+  onSelectImage(imageObject):void{
+    this.utilService.changeToolType('FILTER:SINGLE',this.getActiveFilter(imageObject));
+  }
 
   addImageOnCanvas(url:string):void{
     if (url) {
@@ -98,9 +106,8 @@ export class CanvasComponent implements OnInit {
 
   applyFilterOnSingle(filterProps:any):void{
     if(this.activeObjectType === 'image'){
-      const activeObject:any = this.activeObject;
-      activeObject.filters = this.generateFilterArray(filterProps);
-      activeObject.applyFilters();
+      this.activeObject.filters = this.generateFilterArray(filterProps);
+      this.activeObject.applyFilters();
       this.canvas.renderAll();
     }
   }
@@ -109,17 +116,12 @@ export class CanvasComponent implements OnInit {
     this.globalFilterValues = filterProps;
     const globalFilter = this.generateFilterArray(filterProps);
     this.canvas.forEachObject((object)=>{
-      console.log('worked');
       if(object.type === 'image'){
         object.filters = globalFilter;
         object.applyFilters();
       }
     })
     this.canvas.renderAll();
-  }
-
-  onSelectImage(imageObject):void{
-    this.utilService.changeToolType('FILTER:SINGLE',this.getActiveFilter(imageObject));
   }
 
   // ------------------------------- image cloning ------------------------------ 
@@ -157,20 +159,45 @@ export class CanvasComponent implements OnInit {
 
   // ------------------------------- text -------------------------------------
 
-  onAddText(textProps:object):void {
-    const textObject = new fabric.IText(textProps['text'], {
+  onSelectText(textObject):void{    
+    this.utilService.changeToolType(this.toolType,{
+      fontFamily:textObject['fontFamily'],
+      fontSize:textObject['fontSize'],
+      fontWeight:textObject['fontWeight'],
+      fontStyle:textObject['fontStyle'],
+      color:textObject['fill'],
+      opacity:textObject['opacity'],
+      underline:textObject['underline'],
+      linethrough:textObject['linethrough'],
+      textAlign:textObject['textAlign'],
+      lineHeight:textObject['lineHeight'],
+      charSpacing:textObject['charSpacing']
+    });
+  }
+
+  onSelectTextEditing(textObject):void{
+    // if(textObject.isEditing){
+    //   // const startIndex = textObject.selectionStart;
+    //   // const endIndex = textObject.selectionEnd;
+    //   console.log(textObject.getSelectionStyles())
+    // }
+    this.utilService.changeToolType(this.toolType,{});
+  }
+
+  onAddText():void {
+    const textObject = new fabric.IText(this.defaultTextProps['text'], {
       left: 10,
       top: 10,
       angle: 0,
-      fontFamily: textProps['fontFamily'],
-      fontSize:textProps['fontSize'],
-      fontWeight: textProps['fontWeight'],
-      fontStyle: textProps['fontStyle'],
-      fill: textProps['color'],
-      opacity : textProps['opacity'],
-      underline: textProps['underline'],
-      linethrough: textProps['linethrough'],
-      textAlign: textProps['textAlign'],
+      fontFamily: this.defaultTextProps['fontFamily'],
+      fontSize:this.defaultTextProps['fontSize'],
+      fontWeight: this.defaultTextProps['fontWeight'],
+      fontStyle: this.defaultTextProps['fontStyle'],
+      fill: this.defaultTextProps['color'],
+      opacity : this.defaultTextProps['opacity'],
+      underline: this.defaultTextProps['underline'],
+      linethrough: this.defaultTextProps['linethrough'],
+      textAlign: this.defaultTextProps['textAlign'],
       hasRotatingPoint: true,
       lockScalingX:true,
       lockScalingY:true,
@@ -180,70 +207,34 @@ export class CanvasComponent implements OnInit {
     this.selectItemAfterAdded(textObject);
   }
 
-  onSelectText(textObject):void{
-    const fontFamily = textObject['fontFamily'];
-    const fontSize = textObject['fontSize'];
-    const fontWeight = textObject['fontWeight']
-    const fontStyle = textObject['fontStyle'];
-    const fill = textObject['fill'];
-    const opacity = textObject['opacity'];
-    const underline = textObject['underline'];
-    const linethrough = textObject['linethrough'];
-    const textAlign = textObject['textAlign'];
-    const lineHeight = textObject['lineHeight'];
-    const charSpacing = textObject['charSpacing'];
-    
-    this.utilService.changeToolType(this.toolType,{
-      fontFamily:fontFamily,
-      fontSize:fontSize,
-      fontWeight:fontWeight,
-      fontStyle:fontStyle,
-      color:fill,
-      opacity:opacity,
-      underline:underline,
-      linethrough:linethrough,
-      textAlign:textAlign,
-      lineHeight:lineHeight,
-      charSpacing:charSpacing
-    });
-  }
-
-  onAdvancedSelectText(textObject):void{
-    // if(textObject.isEditing){
-    //   // const startIndex = textObject.selectionStart;
-    //   // const endIndex = textObject.selectionEnd;
-    //   console.log(textObject.getSelectionStyles())
-    // }
-    this.utilService.changeToolType(this.toolType,{});
-  }
-
   onUpdateText(textProps):void{
-    const activeTextObject = this.activeObject;
-    activeTextObject.set('fontFamily',textProps.fontFamily);
-    activeTextObject.set('fontSize',textProps.fontSize);
-    activeTextObject.set('fontWeight',textProps.fontWeight);
-    activeTextObject.set('fontStyle', textProps.fontStyle);
-    activeTextObject.set('fill',textProps.color);
-    activeTextObject.set('opacity',textProps.opacity);
-    activeTextObject.set('underline',textProps.underline);
-    activeTextObject.set('linethrough',textProps.linethrough);
-    activeTextObject.set('textAlign',textProps.textAlign);
-    activeTextObject.set('lineHeight',textProps.lineHeight);
-    activeTextObject.set('charSpacing',textProps.charSpacing);
+    if(this.activeObjectType==='i-text'){
+      this.activeObject.set('fontFamily',textProps.fontFamily);
+      this.activeObject.set('fontSize',textProps.fontSize);
+      this.activeObject.set('fontWeight',textProps.fontWeight);
+      this.activeObject.set('fontStyle', textProps.fontStyle);
+      this.activeObject.set('fill',textProps.color);
+      this.activeObject.set('opacity',textProps.opacity);
+      this.activeObject.set('underline',textProps.underline);
+      this.activeObject.set('linethrough',textProps.linethrough);
+      this.activeObject.set('textAlign',textProps.textAlign);
+      this.activeObject.set('lineHeight',textProps.lineHeight);
+      this.activeObject.set('charSpacing',textProps.charSpacing);
+    }
     this.canvas.renderAll();
   }
 
-  onAdvancedUpdateText(textProps):void{
-    const activeObject = this.activeObject;
-    if( activeObject.isEditing ){
-      activeObject.setSelectionStyles(textProps);
+  onUpdateTextEditing(textProps):void{
+    if(this.activeObjectType==='i-text'){
+      if( this.activeObject.isEditing ){
+        this.activeObject.setSelectionStyles(textProps);
+      }
     }
     this.canvas.renderAll();
   }
 
   // ------------------------------- utility ----------------------------------
   getActiveFilter(imageObject){
-    console.log(imageObject.filters);
     let activeFilter = {
       brightness:0,
       contrast:0,
@@ -444,7 +435,6 @@ export class CanvasComponent implements OnInit {
 
   removeSelection(){
     if(this.activeObjectType === 'group'){
-      console.log('deleting group');
       this.activeObjectList.map((activeObject,index)=>{
         this.canvas.remove(activeObject);
       },this)
@@ -469,6 +459,68 @@ export class CanvasComponent implements OnInit {
     })(obj.toObject);
   }
 
+  // ------------------------- Canvas Event Handlers --------------------------
+
+  onObjectSelected():void{
+    const activeObjectSelection = this.getActiveSelection();
+    this.activeObjectType = activeObjectSelection.type;
+
+    if(this.activeObjectType === 'group'){
+      this.activeObjectList = activeObjectSelection.activeObjectList;
+      this.utilService.onSelectionCreated(this.activeObjectList,this.activeObjectType,{});
+      this.utilService.changeToolType('DEACTIVATE',{});
+    }
+    else{
+      this.activeObject = activeObjectSelection.activeObject;
+      switch (this.activeObjectType) {
+        case 'i-text':
+          this.toolType = 'TEXT'              
+          this.onSelectText(this.activeObject);
+          break;
+        case 'image':
+          this.toolType = 'FILTER'
+          this.onSelectImage(this.activeObject);
+          break;        
+        default:
+          break;
+      }
+      this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+    }
+  }
+
+  onObjectDeselected():void{
+    this.toolType = 'MAIN';
+    this.activeObjectType = '';
+    this.activeObject = undefined;
+    this.activeObjectList = [];
+    this.utilService.changeToolType(this.toolType,this.activeObject);
+    this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+  }
+
+  onEnterningTextEditingMode(){
+    const activeObjectSelection = this.getActiveSelection();
+    this.toolType = 'TEXT:EDITING'
+    this.activeObjectType = activeObjectSelection.type;
+    this.activeObject = activeObjectSelection.activeObject;
+    if(this.activeObjectType === 'i-text'){
+      this.onSelectTextEditing(this.activeObject);
+    }
+  }
+
+  onExitingTextEditingMode(){
+    this.toolType = 'MAIN';
+    this.activeObjectType = '';
+    this.activeObject = undefined;
+    this.activeObjectList = [];
+    this.utilService.changeToolType(this.toolType,undefined);
+  }
+
+  onTextSelectionChange(){
+    if(this.activeObjectType === 'i-text'){
+      this.onSelectTextEditing(this.activeObject);
+    }
+  }
+
 
   constructor(private utilService: UtilService ) {
     this.addImageSubscription = utilService.addImageToCanvas$.subscribe(
@@ -479,7 +531,7 @@ export class CanvasComponent implements OnInit {
 
     this.addTextSubscription = utilService.addTextToCanvas$.subscribe(
       textProps => {
-        this.onAddText(textProps);
+        this.onAddText();
       }
     )
     
@@ -501,11 +553,11 @@ export class CanvasComponent implements OnInit {
     this.onUpdateTextSubscription = utilService.onUpdateText$.subscribe(
       (textProps) => {
         switch (this.toolType) {
-          case 'TEXT:EDITING':
+          case 'TEXT':
             this.onUpdateText(textProps);
             break;
-          case 'TEXT:EDITING-ADVANCED':
-            this.onAdvancedUpdateText(textProps);
+          case 'TEXT:EDITING':
+            this.onUpdateTextEditing(textProps);
             break;
           default:
             break;
@@ -513,31 +565,21 @@ export class CanvasComponent implements OnInit {
       }
     )
 
-    this.onSelectionModifiedSubscription = utilService.onSelectionModified$.subscribe(
-      (modificationType) => {
-        switch (modificationType) {
-          case 'DELETE':
-            this.removeSelection();
-            break;
-        
-          default:
-            break;
-        }
-      }
-    )
-
-    this.globalCommandSubscription = utilService.globalCommand$.subscribe(
+    this.canvasCommandSubscription = utilService.canvasCommand$.subscribe(
       (toolType) => {
         switch (toolType) {
           case 'FILTER:ALL':
             this.cleanSelect();
             this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues)
             break;
-          case 'TEXT':
-            this.onAddText(this.defaultTextProps);
+          case 'ADD_TEXT':
+            this.onAddText();
             break;
-          case 'CLEANSELECT':
+          case 'CLEAN_SELECT':
             this.cleanSelect();
+            break;
+          case 'DELETE':
+            this.removeSelection();
             break;
           default:
             break;
@@ -584,95 +626,32 @@ export class CanvasComponent implements OnInit {
     this.canvas.on({
       'selection:created':(event)=>{
         console.log('selection active');
-        const activeObjectSelection = this.getActiveSelection();
-        this.activeObjectType = activeObjectSelection.type;
-
-        if(this.activeObjectType === 'group'){
-          this.activeObjectList = activeObjectSelection.activeObjectList;
-          this.utilService.onSelectionCreated(this.activeObjectList,this.activeObjectType,{});
-          this.utilService.changeToolType('DEACTIVATE',{});
-        }
-        else{
-          this.activeObject = activeObjectSelection.activeObject;
-          switch (this.activeObjectType) {
-            case 'i-text':
-              this.toolType = 'TEXT:EDITING'              
-              this.onSelectText(this.activeObject);
-              break;
-            case 'image':
-              this.toolType = 'FILTER'
-              this.onSelectImage(this.activeObject);
-              break;        
-            default:
-              break;
-          }
-          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
-        }
+        this.onObjectSelected();
       },
       'selection:updated':(event)=>{
         // same things as in created
         console.log('selection updated');
-        const activeObjectSelection = this.getActiveSelection();
-        this.activeObjectType = activeObjectSelection.type;
-
-        if(this.activeObjectType === 'group'){
-          this.activeObjectList = activeObjectSelection.activeObjectList;
-          this.utilService.onSelectionCreated(this.activeObjectList,this.activeObjectType,{});
-          this.utilService.changeToolType('DEACTIVATE',{});
-        }
-        else{
-          this.activeObject = activeObjectSelection.activeObject;
-          switch (this.activeObjectType) {
-            case 'i-text':
-              this.toolType = 'TEXT:EDITING'              
-              this.onSelectText(this.activeObject);
-              break;
-            case 'image':
-              this.toolType = 'FILTER'
-              this.onSelectImage(this.activeObject);
-              break;        
-            default:
-              break;
-          }
-          this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
-        }
+        this.onObjectSelected();
       },
       'selection:cleared':(event)=>{
         console.log('selection inactive');
-        this.toolType = 'MAIN';
-        this.activeObjectType = '';
-        this.activeObject = undefined;
-        this.activeObjectList = [];
-        this.utilService.changeToolType(this.toolType,this.activeObject);
-        this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+        this.onObjectDeselected();
       },
       'object:modified':(event)=>{
         console.log('object modified');
       },
       'text:editing:entered':(event)=>{
         console.log('editing entered');
-        const activeObjectSelection = this.getActiveSelection();
-        this.toolType = 'TEXT:EDITING-ADVANCED'
-        this.activeObjectType = activeObjectSelection.type;
-        this.activeObject = activeObjectSelection.activeObject;
-        if(this.activeObjectType === 'i-text'){
-          this.onAdvancedSelectText(this.activeObject);
-        }
+        this.onEnterningTextEditingMode();
       },
       'text:editing:exited':(event)=>{
         console.log('editing exit');
-        this.toolType = 'MAIN';
-        this.activeObjectType = '';
-        this.activeObject = undefined;
-        this.activeObjectList = [];
-        this.utilService.changeToolType(this.toolType,undefined);
+        this.onExitingTextEditingMode();
       },
       'text:selection:changed':(event)=>{
         // using preselected text object to optimize
         console.log('selection change');
-        if(this.activeObjectType === 'i-text'){
-          this.onAdvancedSelectText(this.activeObject);
-        }
+        this.onTextSelectionChange();
       },
       'text:changed':(event)=>{
         console.log('text changed');
@@ -682,13 +661,12 @@ export class CanvasComponent implements OnInit {
 
   ngOnDestroy(){
     this.canvas.off();
+    this.windowResizeSubscription.unsubscribe();
     this.addImageSubscription.unsubscribe();
     this.addImageFilterSubscription.unsubscribe();
     this.addTextSubscription.unsubscribe();
     this.onUpdateTextSubscription.unsubscribe();
-    this.windowResizeSubscription.unsubscribe();
-    this.onSelectionModifiedSubscription.unsubscribe();
-    this.globalCommandSubscription.unsubscribe();
+    this.canvasCommandSubscription.unsubscribe();
   }
 
 }

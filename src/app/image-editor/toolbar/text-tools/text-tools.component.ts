@@ -11,7 +11,6 @@ export class TextToolsComponent implements OnInit {
   @Input() selectedToolType;
   @Input() activeObjectProps;
 
-  // private text:string;
   private color:string;
   private opacity:number;
   private fontFamily:string;
@@ -24,23 +23,10 @@ export class TextToolsComponent implements OnInit {
   private lineHeight:number;
   private charSpacing:number;
 
-  // addTextToCanvas():void{
-  //   this.utilService.addTextToCanvas({
-  //     text:this.text,
-  //     color: this.color,
-  //     opacity: this.opacity,
-  //     fontFamily:this.fontFamily,
-  //     fontSize:this.fontSize,
-  //     fontWeight:this.fontWeight,
-  //     fontStyle:this.fontStyle,
-  //     textAlign:this.textAlign,
-  //     underline:this.underline,
-  //     linethrough:this.linethrough
-  //   })
-  // }
+  private fontList = ['Roboto','Alegreya Sans'];
 
   onUpdateText():void{
-    if(this.selectedToolType === 'TEXT:EDITING'){
+    if(this.selectedToolType === 'TEXT'){
       this.utilService.onUpdateText(
         {
           color: this.color,
@@ -57,7 +43,7 @@ export class TextToolsComponent implements OnInit {
         }
       )
     }
-    else if( this.selectedToolType === 'TEXT:EDITING-ADVANCED' ){
+    else if( this.selectedToolType === 'TEXT:EDITING' ){
       this.utilService.onUpdateText(
         {
           fill: this.color,
@@ -101,7 +87,7 @@ export class TextToolsComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.activeObjectProps && this.selectedToolType === 'TEXT:EDITING'){
+    if(this.activeObjectProps && this.selectedToolType === 'TEXT'){
       this.color = this.activeObjectProps.color;
       this.opacity = this.activeObjectProps.opacity;
       this.fontFamily = this.activeObjectProps.fontFamily;
@@ -116,7 +102,7 @@ export class TextToolsComponent implements OnInit {
   }
 
   ngOnChanges(){
-    if(this.activeObjectProps && this.selectedToolType === 'TEXT:EDITING'){
+    if(this.activeObjectProps && this.selectedToolType === 'TEXT'){
       this.color = this.activeObjectProps.color;
       this.opacity = this.activeObjectProps.opacity;
       this.fontFamily = this.activeObjectProps.fontFamily;
@@ -129,8 +115,8 @@ export class TextToolsComponent implements OnInit {
       this.lineHeight = this.activeObjectProps.lineHeight;
       this.charSpacing = this.activeObjectProps.charSpacing;
     }
-    else if( this.selectedToolType === 'TEXT:EDITING-ADVANCED' ){
-      this.color = '#ffffff';
+    else if( this.selectedToolType === 'TEXT:EDITING' ){
+      this.color = '#000000';
       this.fontFamily = 'helvetica';
       this.fontSize = 24;
       this.fontWeight = 'normal';

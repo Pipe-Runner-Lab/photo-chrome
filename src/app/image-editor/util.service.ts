@@ -49,23 +49,17 @@ export class UtilService {
     }
   }
 
-  // ----------------------- Object manipulation ----------------------------
+  // ----------------------- Object selection ---------------------------------
   private onSelectionCreatedSource = new Subject<any>();
   onSelectionCreated$ = this.onSelectionCreatedSource.asObservable();
   onSelectionCreated = (selection,selectionType,extraOptions) => {
     this.onSelectionCreatedSource.next({selection,selectionType,extraOptions});
   }
 
-  private onSelectionModifiedSource = new Subject<any>();
-  onSelectionModified$ = this.onSelectionModifiedSource.asObservable();
-  onSelectionModified = (modificationType) => {
-    this.onSelectionModifiedSource.next(modificationType);
-  }
-
-  //------------------------ global command -----------------------------------
-  private globalCommandSource = new Subject<any>();
-  globalCommand$ = this.globalCommandSource.asObservable();
-  globalCommand = (toolType) => {
-    this.globalCommandSource.next(toolType);
+  //------------------------ canvas command -----------------------------------
+  private canvasCommandSource = new Subject<any>();
+  canvasCommand$ = this.canvasCommandSource.asObservable();
+  canvasCommand = (toolType) => {
+    this.canvasCommandSource.next(toolType);
   }
 }

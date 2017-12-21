@@ -15,7 +15,6 @@ export class ToolbarComponent implements OnInit {
     'MAIN',
     'TEXT',
     'TEXT:EDITING',
-    'TEXT:EDITING-ADVANCED',
     'CROP',
     'PREVIEW',
     'FILTER:ALL',
@@ -32,11 +31,10 @@ export class ToolbarComponent implements OnInit {
 
   onChangeToolType(toolType:string):void {
     this.selectedToolType = toolType;
-    // clear other values here
   }
 
   cleanSelect(){
-    this.utilService.globalCommand('CLEANSELECT');
+    this.utilService.canvasCommand('CLEAN_SELECT');
     this.onChangeToolType('MAIN');
   }
 

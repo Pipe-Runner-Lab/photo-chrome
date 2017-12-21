@@ -11,7 +11,7 @@
   </div>
   <div class="main-tool-slider">
     <app-main-tools [selectedToolType]="selectedToolType" *ngIf="selectedToolType==='MAIN' || selectedToolType==='DEACTIVATE'"></app-main-tools>
-    <app-text-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='TEXT' || selectedToolType==='TEXT:EDITING' || selectedToolType==='TEXT:EDITING-ADVANCED'"></app-text-tools>
+    <app-text-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='TEXT' || selectedToolType==='TEXT:EDITING'"></app-text-tools>
     <app-filter-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='FILTER:ALL' || selectedToolType==='FILTER:SINGLE'"></app-filter-tools>
   </div>
 </div>

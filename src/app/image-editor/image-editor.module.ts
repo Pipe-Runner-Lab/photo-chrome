@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MatInputModule,MatButtonModule,MatIconModule,MatGridListModule,MatSliderModule,MatTooltipModule} from '@angular/material';
+import {MatButtonModule,MatIconModule,MatGridListModule,MatSliderModule,MatTooltipModule,MatSelectModule} from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'ngx-color-picker';
 
@@ -17,15 +17,15 @@ import { TextToolsComponent } from './toolbar/text-tools/text-tools.component'
 
 @NgModule({
   imports: [
-    CommonModule,
-    MatInputModule,
+    CommonModule,    
     MatButtonModule,
     MatIconModule,
     MatGridListModule,
     FormsModule,
     MatSliderModule,
     ColorPickerModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSelectModule
   ],
   declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent, MainToolsComponent, FilterToolsComponent, TextToolsComponent],
   exports:[ImageEditorComponent],
