@@ -465,6 +465,32 @@ export class CanvasComponent implements OnInit {
     })(obj.toObject);
   }
 
+  bringForward(){
+    if(this.activeObjectType === 'group' && this.activeObjectList !== []){
+      console.log('group moving forward');
+      this.activeObjectList.map( (object)=>{
+        object.bringForward();
+      })
+    }
+    else if(this.activeObjectType !== 'group' && this.activeObject !== undefined ){
+      this.activeObject.bringForward();
+    }
+    this.canvas.discardActiveObject().renderAll();
+  }
+
+  sendBackward(){
+    if(this.activeObjectType === 'group' && this.activeObjectList !== []){
+      console.log('group moving back');
+      this.activeObjectList.map( (object)=>{
+        object.sendBackwards();
+      })
+    }
+    else if(this.activeObjectType !== 'group' && this.activeObject !== undefined ){
+      this.activeObject.sendBackwards();
+    }
+    this.canvas.discardActiveObject().renderAll();
+  }
+
   // ------------------------- Canvas Event Handlers --------------------------
 
   onObjectSelected():void{
@@ -587,6 +613,12 @@ export class CanvasComponent implements OnInit {
           case 'DELETE':
             this.removeSelection();
             break;
+          case 'BRING_FORWARD':
+            this.bringForward();
+            break;
+          case 'SEND_BACKWARD':
+            this.sendBackward();
+            break;
           default:
             break;
         }
@@ -617,12 +649,13 @@ export class CanvasComponent implements OnInit {
       selectionBorderColor: '#B3E5FC',
       backgroundColor:'#ffffff'
     });
+    fabric.textureSize = 4096;
+    console.log(fabric.textureSize);
 
     // Initializing backend
     var webglBackend = new fabric.WebglFilterBackend();
     // var canvas2dBackend = new fabric.Canvas2dFilterBackend()
     fabric.filterBackend = fabric.initFilterBackend();
-    fabric.filterBackend = webglBackend;
 
     // Default size of canvas
     this.canvas.setWidth(this.size.width);

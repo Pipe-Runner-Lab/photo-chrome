@@ -121,7 +121,7 @@ export class TextToolsComponent implements OnInit {
     }
     else if( this.selectedToolType === 'TEXT:EDITING' ){
       
-      this.color = this.activeObjectProps['fill'] || '#ffffff';
+      this.color = this.activeObjectProps['fill'] || '#7F7F7F';
       this.fontFamily = this.activeObjectProps['fontFamily'] || 'Roboto';
       this.fontSize = this.activeObjectProps['fontSize'] || 24;
       this.fontWeight = this.activeObjectProps['fontWeight'] || 'normal';

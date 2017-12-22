@@ -38,6 +38,14 @@ export class ToolbarComponent implements OnInit {
     this.onChangeToolType('MAIN');
   }
 
+  bringForward(){
+    this.utilService.canvasCommand('BRING_FORWARD');
+  }
+
+  sendBackward(){
+    this.utilService.canvasCommand('SEND_BACKWARD');
+  }
+
   constructor(private utilService:UtilService) {
       this.selectedToolType = this.selectedToolTypeList[0];
       this.onChangeToolTypeSubscription = utilService.changeToolType$.subscribe(

@@ -70,7 +70,6 @@ export class FilterToolsComponent implements OnInit {
 
   ngOnInit() {
     this.filterScope = this.filterScope;
-    console.log(this.filterValues);
     this.filterValues = this.activeObjectProps;
   }
 

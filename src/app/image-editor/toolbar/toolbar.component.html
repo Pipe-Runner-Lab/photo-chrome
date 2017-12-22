@@ -3,8 +3,8 @@
     <button mat-icon-button *ngIf="selectedToolType!=='MAIN' && selectedToolType!=='DEACTIVATE'" (click)="cleanSelect()"><i class="material-icons icons">arrow_back</i></button>
     <button mat-icon-button [disabled]="selection===undefined" *ngIf="selectedToolType==='MAIN' || selectedToolType==='DEACTIVATE'"
       (click)="cleanSelect()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">cached</i></button>
-    <button mat-icon-button [disabled]="selection===undefined"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">keyboard_arrow_up</i></button>
-    <button mat-icon-button [disabled]="selection===undefined"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">keyboard_arrow_down</i></button>
+    <button mat-icon-button [disabled]="selection===undefined" (click)="bringForward()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">keyboard_arrow_up</i></button>
+    <button mat-icon-button [disabled]="selection===undefined" (click)="sendBackward()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">keyboard_arrow_down</i></button>
     <div class="spacer"></div>
     <button mat-icon-button><i class="material-icons icons">undo</i></button>
     <button mat-icon-button><i class="material-icons icons">redo</i></button>
