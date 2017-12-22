@@ -466,29 +466,17 @@ export class CanvasComponent implements OnInit {
   }
 
   bringForward(){
-    if(this.activeObjectType === 'group' && this.activeObjectList !== []){
-      console.log('group moving forward');
-      this.activeObjectList.map( (object)=>{
-        object.bringForward();
-      })
-    }
-    else if(this.activeObjectType !== 'group' && this.activeObject !== undefined ){
+    if(this.activeObjectType !== 'group' && this.activeObject !== undefined ){
       this.activeObject.bringForward();
+      this.canvas.discardActiveObject().renderAll();
     }
-    this.canvas.discardActiveObject().renderAll();
   }
 
   sendBackward(){
-    if(this.activeObjectType === 'group' && this.activeObjectList !== []){
-      console.log('group moving back');
-      this.activeObjectList.map( (object)=>{
-        object.sendBackwards();
-      })
-    }
-    else if(this.activeObjectType !== 'group' && this.activeObject !== undefined ){
+    if(this.activeObjectType !== 'group' && this.activeObject !== undefined ){
       this.activeObject.sendBackwards();
+      this.canvas.discardActiveObject().renderAll();
     }
-    this.canvas.discardActiveObject().renderAll();
   }
 
   // ------------------------- Canvas Event Handlers --------------------------

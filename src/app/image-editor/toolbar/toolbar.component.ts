@@ -24,6 +24,7 @@ export class ToolbarComponent implements OnInit {
   private selectedToolType:string;
   private activeObjectProps:any;
   private selection:any;
+  private selectionType:string;
 
   // ---------------------------- Subscription ------------------------------
   private onChangeToolTypeSubscription:Subscription;
@@ -57,7 +58,8 @@ export class ToolbarComponent implements OnInit {
         }
       )
       this.onSelectionCreatedSubscription = utilService.onSelectionCreated$.subscribe(
-        ({selection}) => {
+        ({selection,selectionType}) => {
+          this.selectionType = selectionType;
           this.selection = selection;
         }
       )
