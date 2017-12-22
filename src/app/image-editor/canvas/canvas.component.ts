@@ -46,7 +46,7 @@ export class CanvasComponent implements OnInit {
   // Tool default values
   private defaultTextProps = {
     text:'Sample Text',
-    color:'#000000',
+    color:'#7F7F7F',
     opacity:1,
     fontFamily:'Roboto',
     fontSize:24,
@@ -176,12 +176,18 @@ export class CanvasComponent implements OnInit {
   }
 
   onSelectTextEditing(textObject):void{
-    // if(textObject.isEditing){
-    //   // const startIndex = textObject.selectionStart;
-    //   // const endIndex = textObject.selectionEnd;
-    //   console.log(textObject.getSelectionStyles())
-    // }
-    this.utilService.changeToolType(this.toolType,{});
+    if(textObject.isEditing){
+      const startIndex = textObject.selectionStart;
+      const endIndex = textObject.selectionEnd;
+      if(startIndex!==endIndex){
+        this.utilService.changeToolType(this.toolType,textObject.getSelectionStyles()[0]);
+      }
+      else{
+        this.utilService.changeToolType(this.toolType,{
+          isSelectionInactive:true
+        });
+      }
+    }
   }
 
   onAddText():void {

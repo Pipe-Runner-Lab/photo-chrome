@@ -23,6 +23,8 @@ export class TextToolsComponent implements OnInit {
   private lineHeight:number;
   private charSpacing:number;
 
+  private isSelectionInactive:boolean;
+
   private fontList = ['Roboto','Alegreya Sans'];
 
   onUpdateText():void{
@@ -99,6 +101,8 @@ export class TextToolsComponent implements OnInit {
       this.lineHeight = this.activeObjectProps.lineHeight;
       this.charSpacing = this.activeObjectProps.charSpacing;
     }
+
+    this.isSelectionInactive = false;
   }
 
   ngOnChanges(){
@@ -116,13 +120,16 @@ export class TextToolsComponent implements OnInit {
       this.charSpacing = this.activeObjectProps.charSpacing;
     }
     else if( this.selectedToolType === 'TEXT:EDITING' ){
-      this.color = '#000000';
-      this.fontFamily = 'helvetica';
-      this.fontSize = 24;
-      this.fontWeight = 'normal';
-      this.fontStyle = 'normal';
-      this.underline = false;
-      this.linethrough = false;
+      
+      this.color = this.activeObjectProps['fill'] || '#ffffff';
+      this.fontFamily = this.activeObjectProps['fontFamily'] || 'Roboto';
+      this.fontSize = this.activeObjectProps['fontSize'] || 24;
+      this.fontWeight = this.activeObjectProps['fontWeight'] || 'normal';
+      this.fontStyle = this.activeObjectProps['fontStyle'] || 'normal';
+      this.underline = this.activeObjectProps['underline'] || false;
+      this.linethrough = this.activeObjectProps['linethrough'] || false;
+
+      this.isSelectionInactive = this.activeObjectProps.isSelectionInactive || false;
     }
   }
 

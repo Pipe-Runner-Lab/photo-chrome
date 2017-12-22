@@ -1,6 +1,7 @@
 <!-- Font style -->
 <div class="text-field-container">
-  <mat-select class="text-field" placeholder="Font family" [(value)]="fontFamily" (change)="onUpdateText()" disableRipple>
+  <mat-select [disabled]="isSelectionInactive" class="text-field" placeholder="Font family" [(value)]="fontFamily" (change)="onUpdateText()"
+    disableRipple>
     <mat-option *ngFor="let font of fontList" [value]="font">
       {{ font }}
     </mat-option>
@@ -10,39 +11,40 @@
 <!-- text styling -->
 <mat-grid-list class="style-container" cols="4" rowHeight="48px">
   <mat-grid-tile>
-    <button mat-icon-button (click)="toggleBold()"><i [ngClass]="{'active-icon':fontWeight==='bold'}" class="material-icons icons">format_bold</i></button>
+    <button matTooltip="Bold" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button (click)="toggleBold()"><i [ngClass]="{'active-icon':fontWeight==='bold','icons':!isSelectionInactive}" class="material-icons">format_bold</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button (click)="toggleItalic()"><i [ngClass]="{'active-icon':fontStyle==='italic'}" class="material-icons icons">format_italic</i></button>
+    <button matTooltip="Italic" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button (click)="toggleItalic()"><i [ngClass]="{'active-icon':fontStyle==='italic','icons':!isSelectionInactive}" class="material-icons">format_italic</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button (click)="toggleUnderline()"><i [ngClass]="{'active-icon':underline}" class="material-icons icons">format_underlined</i></button>
+    <button matTooltip="Underline" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button (click)="toggleUnderline()"><i [ngClass]="{'active-icon':underline,'icons':!isSelectionInactive}" class="material-icons">format_underlined</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button (click)="toggleLinethrough()"><i [ngClass]="{'active-icon':linethrough}" class="material-icons icons">strikethrough_s</i></button>
+    <button matTooltip="Strikeout" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button (click)="toggleLinethrough()"><i [ngClass]="{'active-icon':linethrough,'icons':!isSelectionInactive}" class="material-icons">strikethrough_s</i></button>
   </mat-grid-tile>
 </mat-grid-list>
 
 <!-- text align -->
 <mat-grid-list *ngIf="selectedToolType!=='TEXT:EDITING'" class="style-container" cols="4" rowHeight="48px">
   <mat-grid-tile>
-    <button mat-icon-button (click)="setTextAlign('left')"><i [ngClass]="{'active-icon':textAlign==='left'}" class="material-icons icons">format_align_left</i></button>
+    <button matTooltip="Left Align" matTooltipPosition="above" mat-icon-button (click)="setTextAlign('left')"><i [ngClass]="{'active-icon':textAlign==='left'}" class="material-icons icons">format_align_left</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button (click)="setTextAlign('center')"><i [ngClass]="{'active-icon':textAlign==='center'}" class="material-icons icons">format_align_center</i></button>
+    <button matTooltip="Center Align" matTooltipPosition="above" mat-icon-button (click)="setTextAlign('center')"><i [ngClass]="{'active-icon':textAlign==='center'}" class="material-icons icons">format_align_center</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button (click)="setTextAlign('right')"><i [ngClass]="{'active-icon':textAlign==='right'}" class="material-icons icons">format_align_right</i></button>
+    <button matTooltip="Right Align" matTooltipPosition="above" mat-icon-button (click)="setTextAlign('right')"><i [ngClass]="{'active-icon':textAlign==='right'}" class="material-icons icons">format_align_right</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button mat-icon-button (click)="setTextAlign('justify')"><i [ngClass]="{'active-icon':textAlign==='justify'}" class="material-icons icons">format_align_justify</i></button>
+    <button matTooltip="Center Justify" matTooltipPosition="above" mat-icon-button (click)="setTextAlign('justify')"><i [ngClass]="{'active-icon':textAlign==='justify'}" class="material-icons icons">format_align_justify</i></button>
   </mat-grid-tile>
 </mat-grid-list>
 
 <!-- color and opacity picker -->
 <div class="picker-container" style="margin:12px 0px 0px 0px;">
-  <button mat-icon-button [(colorPicker)]="color" (colorPickerChange)="onUpdateText()" [cpWidth]="196" [cpDisableInput]="true"
-    [cpPosition]="'bottom'" [cpPositionOffset]="'50%'" [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
+  <button matTooltip="Color Picker" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button [(colorPicker)]="color"
+    (colorPickerChange)="onUpdateText()" [cpWidth]="196" [cpDisableInput]="true" [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
+    [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
   <i [style.color]="color " class="material-icons icons">color_lens</i>
   </button>
   <div class="slider-wrapper">
@@ -53,17 +55,18 @@
 
 <!-- font size -->
 <div class="picker-container">
-  <div class="font-size-text">
+  <div matTooltip="Font Size" matTooltipPosition="above" class="font-size-text">
     {{fontSize}}
   </div>
   <div class="slider-wrapper">
-    <mat-slider min="8" step="1" max="74" thumb-label="true" [(ngModel)]="fontSize" (change)="onUpdateText()" class="slider "></mat-slider>
+    <mat-slider [disabled]="isSelectionInactive" min="8" step="1" max="100" thumb-label="true" [(ngModel)]="fontSize" (change)="onUpdateText()"
+      class="slider "></mat-slider>
   </div>
 </div>
 
 <!-- line height picker -->
 <div *ngIf="selectedToolType!=='TEXT:EDITING'" class="picker-container">
-  <div class="non-interactive-icon-wrapper">
+  <div matTooltip="Line Spacing" matTooltipPosition="above" class="non-interactive-icon-wrapper">
     <i class="material-icons icons">format_line_spacing</i>
   </div>
   <div class="slider-wrapper">
