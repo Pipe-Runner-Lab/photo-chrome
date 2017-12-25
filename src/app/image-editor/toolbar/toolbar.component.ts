@@ -39,6 +39,11 @@ export class ToolbarComponent implements OnInit {
     this.onChangeToolType('MAIN');
   }
 
+  backToMainMenu(){
+    this.utilService.canvasCommand('BACK_TO_MAIN_MENU');
+    this.onChangeToolType('MAIN');
+  }
+
   bringForward(){
     this.utilService.canvasCommand('BRING_FORWARD');
   }

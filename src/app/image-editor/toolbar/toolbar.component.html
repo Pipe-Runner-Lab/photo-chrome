@@ -1,10 +1,10 @@
 <div class="toolbar-wrapper">
   <div class="icon-panel">
-    <button mat-icon-button *ngIf="selectedToolType!=='MAIN' && selectedToolType!=='DEACTIVATE'" (click)="cleanSelect()"><i class="material-icons icons">arrow_back</i></button>
+    <button mat-icon-button *ngIf="selectedToolType!=='MAIN' && selectedToolType!=='DEACTIVATE'" (click)="backToMainMenu()"><i class="material-icons icons">arrow_back</i></button>
     <button mat-icon-button [disabled]="selection===undefined" *ngIf="selectedToolType==='MAIN' || selectedToolType==='DEACTIVATE'"
-      (click)="cleanSelect()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">cached</i></button>
-    <button mat-icon-button [disabled]="selection===undefined || selectionType==='group'" (click)="bringForward()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined && selectionType!=='group'}">keyboard_arrow_up</i></button>
-    <button mat-icon-button [disabled]="selection===undefined || selectionType==='group'" (click)="sendBackward()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined && selectionType!=='group'}">keyboard_arrow_down</i></button>
+      (click)="cleanSelect()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined}">do_not_disturb_alt</i></button>
+    <button mat-icon-button [disabled]="selection===undefined || selectionType==='group'" (click)="bringForward()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined && selectionType!=='group'}">flip_to_front</i></button>
+    <button mat-icon-button [disabled]="selection===undefined || selectionType==='group'" (click)="sendBackward()"><i class="material-icons" [ngClass]="{'icons':selection!==undefined && selectionType!=='group'}">flip_to_back</i></button>
     <div class="spacer"></div>
     <button mat-icon-button><i class="material-icons icons">undo</i></button>
     <button mat-icon-button><i class="material-icons icons">redo</i></button>
@@ -13,5 +13,6 @@
     <app-main-tools [selectedToolType]="selectedToolType" *ngIf="selectedToolType==='MAIN' || selectedToolType==='DEACTIVATE'"></app-main-tools>
     <app-text-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='TEXT' || selectedToolType==='TEXT:EDITING'"></app-text-tools>
     <app-filter-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='FILTER:ALL' || selectedToolType==='FILTER:SINGLE'"></app-filter-tools>
+    <app-crop-tools [selectedToolType]="selectedToolType" *ngIf="selectedToolType==='CROP'"></app-crop-tools>
   </div>
 </div>

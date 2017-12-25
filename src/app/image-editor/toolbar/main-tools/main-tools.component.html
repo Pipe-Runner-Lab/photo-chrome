@@ -1,17 +1,23 @@
 <mat-grid-list cols="3" rowHeight="52px">
   <mat-grid-tile>
-    <button matTooltip="Crop" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">crop</i></button>
+    <button matTooltip="Crop" matTooltipPosition="above" (click)="canvasCommand('START_CROP')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">crop</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button matTooltip="Strech Fullscreen" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_out_map</i></button>
+    <button matTooltip="Strech Fullscreen" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">fullscreen</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Strech Fullscreen" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">fullscreen_exit</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
     <button matTooltip="Preview" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_in</i></button>
   </mat-grid-tile>
-  <mat-grid-tile (click)="canvasCommand('ADD_TEXT')">
-    <button matTooltip="Text" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">text_fields</i></button>
+  <mat-grid-tile>
+    <button matTooltip="Text" matTooltipPosition="above" (click)="canvasCommand('ADD_TEXT')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">text_fields</i></button>
   </mat-grid-tile>
-  <mat-grid-tile (click)="canvasCommand('FILTER:ALL')">
-    <button matTooltip="Photo Filter" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_painter</i></button>
+  <mat-grid-tile>
+    <button matTooltip="Strech Fullscreen" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">flip2</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Photo Filter" matTooltipPosition="above" (click)="canvasCommand('ADD_FILTER')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_painter</i></button>
   </mat-grid-tile>
 </mat-grid-list>
