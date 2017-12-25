@@ -5,6 +5,7 @@ import { Subscription }   from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/throttleTime';
+import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/filter';
 
 declare const fabric: any;
@@ -21,6 +22,10 @@ export class CanvasComponent implements OnInit {
   private activeObjectType: string;
   private activeObject: any;
   private activeObjectList: any;
+
+  // Croping 
+  private overlay:any;
+  private croppingWindow:any;
 
   // Editor properties
   private screenReductionFactor:number = 180;
@@ -64,12 +69,17 @@ export class CanvasComponent implements OnInit {
     height: Math.round(window.innerHeight - this.screenReductionFactor),
     width: Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[3]),
   };
+  // private oldSize: any = {
+  //   height:this.size.height,
+  //   width:this.size.width,
+  // }
 
   // private json: any;
   // private selected: any;
 
   // ------------------------------- subscribtion ------------------------------
-  private windowResizeSubscription:Subscription;
+  // private windowResizeSubscription:Subscription;
+  // private objectResizeSubscription:Subscription;
   private addImageSubscription:Subscription;
   private addImageFilterSubscription:Subscription;
   private addTextSubscription:Subscription;
@@ -122,6 +132,55 @@ export class CanvasComponent implements OnInit {
       }
     })
     this.canvas.renderAll();
+  }
+
+  // ------------------------------- cropping -----------------------------------
+  startCrop(){
+    console.log('cropping started');
+    this.cleanSelect();
+    this.overlay = new fabric.Rect({
+      left: 0,
+      top: 0,
+      fill: '#000000',
+      opacity:0.5,
+      width: this.size.width,
+      height: this.size.height,
+    });
+    this.canvas.add(this.overlay);
+    this.canvas.forEachObject((object)=>{
+      object.selectable = false;
+    })
+     this.croppingWindow = new fabric.Rect({
+      left: 100,
+      top: 100,
+      fill: 'transparent',
+      borderColor:'#ffffff',
+      cornerColor:'#ffffff',
+      borderOpacityWhenMoving:1,
+      hasRotatingPoint:false,
+      padding:0,
+      width: 200,
+      height: 200,
+    });
+    this.canvas.add(this.croppingWindow);
+    this.selectItemAfterAdded(this.croppingWindow);
+    this.canvas.renderAll();
+  }
+
+  cropSelectedWindow(){
+
+  }
+
+  stopCrop(){
+    this.canvas.remove(this.overlay);
+    this.canvas.remove(this.croppingWindow);
+    this.canvas.forEachObject((object)=>{
+      object.selectable = true;
+    })
+    this.canvas.renderAll();
+
+    this.croppingWindow = undefined;
+    this.overlay = undefined;
   }
 
   // ------------------------------- image cloning ------------------------------ 
@@ -240,6 +299,10 @@ export class CanvasComponent implements OnInit {
   }
 
   // ------------------------------- utility ----------------------------------
+  // resizeAllObjects(){
+  //   console.log('resize initiated');
+  // }
+  
   getActiveFilter(imageObject){
     let activeFilter = {
       brightness:0,
@@ -498,8 +561,11 @@ export class CanvasComponent implements OnInit {
           this.onSelectText(this.activeObject);
           break;
         case 'image':
-          this.toolType = 'FILTER'
-          this.onSelectImage(this.activeObject);
+          // this.toolType = 'FILTER'
+          if(this.toolType === 'FILTER:ALL'){
+            this.toolType = 'FILTER:SINGLE';
+            this.onSelectImage(this.activeObject)
+          }
           break;        
         default:
           break;
@@ -509,12 +575,32 @@ export class CanvasComponent implements OnInit {
   }
 
   onObjectDeselected():void{
-    this.toolType = 'MAIN';
-    this.activeObjectType = '';
-    this.activeObject = undefined;
-    this.activeObjectList = [];
-    this.utilService.changeToolType(this.toolType,this.activeObject);
-    this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+    // Turn off crop mode
+    if(this.croppingWindow){
+      this.stopCrop();
+    }
+
+    switch (this.activeObjectType) {
+      case 'image':
+        // Don't change to MAIN menu for image
+        if(this.toolType === 'FILTER:SINGLE'){
+          this.toolType = 'FILTER:ALL';
+        }
+        this.activeObjectType = '';
+        this.activeObject = undefined;
+        this.activeObjectList = [];
+        this.utilService.changeToolType(this.toolType,this.activeObject);
+        this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+        break;    
+      default:
+        this.toolType = 'MAIN';
+        this.activeObjectType = '';
+        this.activeObject = undefined;
+        this.activeObjectList = [];
+        this.utilService.changeToolType(this.toolType,this.activeObject);
+        this.utilService.onSelectionCreated(this.activeObject,this.activeObjectType,{});
+        break;
+    }
   }
 
   onEnterningTextEditingMode(){
@@ -588,15 +674,30 @@ export class CanvasComponent implements OnInit {
     this.canvasCommandSubscription = utilService.canvasCommand$.subscribe(
       (toolType) => {
         switch (toolType) {
+          case 'ADD_FILTER':
+            if(this.activeObjectType==='image'){
+              this.toolType = 'FILTER:SINGLE';
+              this.utilService.changeToolType('FILTER:SINGLE',this.getActiveFilter(this.activeObject));
+            }
+            else if(this.activeObjectType===''){
+              this.toolType = 'FILTER:ALL';
+              this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues);
+            }
+            break;
           case 'FILTER:ALL':
             this.cleanSelect();
-            this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues)
+            this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues);
             break;
           case 'ADD_TEXT':
             this.onAddText();
             break;
           case 'CLEAN_SELECT':
             this.cleanSelect();
+            break;
+          case 'BACK_TO_MAIN_MENU':
+            if(this.activeObjectType!=='image'){
+              this.cleanSelect();
+            }
             break;
           case 'DELETE':
             this.removeSelection();
@@ -607,20 +708,37 @@ export class CanvasComponent implements OnInit {
           case 'SEND_BACKWARD':
             this.sendBackward();
             break;
+          case 'START_CROP':
+            this.startCrop();
+            this.utilService.changeToolType('CROP',{});
+            break;
+          case 'STOP_CROP':
+            this.onObjectDeselected();
+            break;
+          case 'FINISH_CROP':
+            // crop all images with the mentioned window
+            break;
           default:
             break;
         }
       }
     )
 
-    this.windowResizeSubscription = Observable.fromEvent(window,'resize').filter(()=>(window.innerHeight>720)).throttleTime(100).subscribe(
-      ()=>{
-          this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
-          this.size.width = Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[1]);
-          this.canvas.setWidth(this.size.width);
-          this.canvas.setHeight(this.size.height);
-      }
-    )
+    // this.windowResizeSubscription = Observable.fromEvent(window,'resize').filter(()=>(window.innerHeight>720)).throttleTime(100).subscribe(
+    //   ()=>{
+    //       this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
+    //       this.size.width = Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[1]);
+    //       this.canvas.setWidth(this.size.width);
+    //       this.canvas.setHeight(this.size.height);
+    //   }
+    // )
+
+    // this.objectResizeSubscription = Observable.fromEvent(window,'resize').filter(()=>(window.innerHeight>720)).debounceTime(50).subscribe(
+    //   ()=>{
+    //     this.oldSize = this.size;
+    //     this.resizeAllObjects();
+    //   }
+    // )
   }
 
   ngOnInit() {
@@ -688,7 +806,8 @@ export class CanvasComponent implements OnInit {
 
   ngOnDestroy(){
     this.canvas.off();
-    this.windowResizeSubscription.unsubscribe();
+    // this.windowResizeSubscription.unsubscribe();
+    // this.objectResizeSubscription.unsubscribe();
     this.addImageSubscription.unsubscribe();
     this.addImageFilterSubscription.unsubscribe();
     this.addTextSubscription.unsubscribe();

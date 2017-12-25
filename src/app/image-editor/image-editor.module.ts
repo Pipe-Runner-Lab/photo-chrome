@@ -13,7 +13,8 @@ import { MenubarComponent } from './menubar/menubar.component';
 import { UtilService } from './util.service';
 import { MainToolsComponent } from './toolbar/main-tools/main-tools.component';
 import { FilterToolsComponent } from './toolbar/filter-tools/filter-tools.component';
-import { TextToolsComponent } from './toolbar/text-tools/text-tools.component'
+import { TextToolsComponent } from './toolbar/text-tools/text-tools.component';
+import { CropToolsComponent } from './toolbar/crop-tools/crop-tools.component'
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import { TextToolsComponent } from './toolbar/text-tools/text-tools.component'
     MatTooltipModule,
     MatSelectModule
   ],
-  declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent, MainToolsComponent, FilterToolsComponent, TextToolsComponent],
+  declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent, MainToolsComponent, FilterToolsComponent, TextToolsComponent, CropToolsComponent],
   exports:[ImageEditorComponent],
   providers:[UtilService]
 })
