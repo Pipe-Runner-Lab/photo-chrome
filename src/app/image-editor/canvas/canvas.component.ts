@@ -175,10 +175,11 @@ export class CanvasComponent implements OnInit {
         if(object.type === 'image'){
           const objectWidth = object.getScaledWidth();
           const objectHeight = object.getScaledHeight();
-          let x = (objectWidth/2) - Math.abs(object.left - this.croppingWindow.left);
-          let y = (objectHeight/2) - Math.abs(object.top - this.croppingWindow.top);
+          let x = (objectWidth/2) - (this.croppingWindow.left - object.left);
+          let y = (objectHeight/2) - (this.croppingWindow.top - object.top);
           x = x * (1/object.scaleX);
           y = y * (1/object.scaleY);
+          console.log(-x,-y);
           
           object.clipTo = (ctx) =>{
             ctx.rect(-x,-y,width * (1/object.scaleX),height * (1/object.scaleY));
