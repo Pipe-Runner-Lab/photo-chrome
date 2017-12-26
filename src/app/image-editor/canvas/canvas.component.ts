@@ -168,7 +168,25 @@ export class CanvasComponent implements OnInit {
   }
 
   cropSelectedWindow(){
-
+    const width = this.croppingWindow.getScaledWidth()
+    const height = this.croppingWindow.getScaledHeight()
+    this.canvas.forEachObject(
+      (object)=>{
+        if(object.type === 'image'){
+          const objectWidth = object.getScaledWidth();
+          const objectHeight = object.getScaledHeight();
+          let x = (objectWidth/2) - Math.abs(object.left - this.croppingWindow.left);
+          let y = (objectHeight/2) - Math.abs(object.top - this.croppingWindow.top);
+          x = x * (1/object.scaleX);
+          y = y * (1/object.scaleY);
+          
+          object.clipTo = (ctx) =>{
+            ctx.rect(-x,-y,width * (1/object.scaleX),height * (1/object.scaleY));
+          }
+        }
+      }
+    )
+    this.stopCrop();
   }
 
   stopCrop(){
@@ -716,7 +734,7 @@ export class CanvasComponent implements OnInit {
             this.onObjectDeselected();
             break;
           case 'FINISH_CROP':
-            // crop all images with the mentioned window
+            this.cropSelectedWindow();
             break;
           default:
             break;
