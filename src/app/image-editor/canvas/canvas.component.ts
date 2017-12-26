@@ -186,10 +186,9 @@ export class CanvasComponent implements OnInit {
           let y = (objectHeight/2) - (this.croppingWindow.top - object.top);
           x = x * (1/object.scaleX);
           y = y * (1/object.scaleY);
-          console.log(-x,-y);
           
           object.clipTo = (ctx) =>{
-            ctx.rect(-x,-y,width * (1/object.scaleX),height * (1/object.scaleY));
+            ctx.rect((object.flipX ? 1 : -1) * x, -y, (object.flipX ? -1 : 1) * width * (1/object.scaleX), height * (1/object.scaleY));
           }
         }
       }
