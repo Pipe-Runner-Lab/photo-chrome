@@ -134,6 +134,13 @@ export class CanvasComponent implements OnInit {
     this.canvas.renderAll();
   }
 
+  flipSelectedImage(){
+    if(this.activeObjectType === 'image'){
+      this.activeObject.flipX = this.activeObject.flipX ? !this.activeObject.flipX : true;
+    }
+    this.canvas.renderAll();
+  }
+
   // ------------------------------- cropping -----------------------------------
   startCrop(){
     console.log('cropping started');
@@ -720,6 +727,7 @@ export class CanvasComponent implements OnInit {
             break;
           case 'DELETE':
             this.removeSelection();
+            this.onObjectDeselected();
             break;
           case 'BRING_FORWARD':
             this.bringForward();
@@ -736,6 +744,9 @@ export class CanvasComponent implements OnInit {
             break;
           case 'FINISH_CROP':
             this.cropSelectedWindow();
+            break;
+          case 'FLIP:X':
+            this.flipSelectedImage();
             break;
           default:
             break;
