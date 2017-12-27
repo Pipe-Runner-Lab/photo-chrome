@@ -12,12 +12,15 @@
     <button matTooltip="Preview" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_in</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
+    <button matTooltip="Preview" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">content_copy</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
     <button matTooltip="Text" matTooltipPosition="above" (click)="canvasCommand('ADD_TEXT')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">text_fields</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button matTooltip="Flip Horizontally" matTooltipPosition="above" (click)="canvasCommand('FLIP:X')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">flip2</i></button>
+    <button matTooltip="Flip Horizontally" matTooltipPosition="above" (click)="canvasCommand('FLIP:X')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">flip</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button matTooltip="Photo Filter" matTooltipPosition="above" (click)="canvasCommand('ADD_FILTER')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_painter</i></button>
+    <button matTooltip="Photo Filter" matTooltipPosition="above" (click)="canvasCommand('ADD_FILTER')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_paint</i></button>
   </mat-grid-tile>
 </mat-grid-list>

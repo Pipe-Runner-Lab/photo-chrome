@@ -134,6 +134,8 @@ export class CanvasComponent implements OnInit {
     this.canvas.renderAll();
   }
 
+  // ------------------------------- image flip --------------------------------
+
   flipSelectedImage(){
     if(this.activeObjectType === 'image'){
       this.activeObject.flipX = this.activeObject.flipX ? !this.activeObject.flipX : true;
