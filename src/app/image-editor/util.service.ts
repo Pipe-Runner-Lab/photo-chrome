@@ -62,4 +62,11 @@ export class UtilService {
   canvasCommand = (toolType) => {
     this.canvasCommandSource.next(toolType);
   }
+
+  //------------------------ open snackbar -------------------------------------
+  private openSnackBarSource = new Subject<any>();
+  openSnackBar$ = this.openSnackBarSource.asObservable();
+  openSnackBar = (message,duration) => {
+    this.openSnackBarSource.next({message,duration});
+  }
 }

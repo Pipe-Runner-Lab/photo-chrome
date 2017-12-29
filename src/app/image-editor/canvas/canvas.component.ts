@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import 'fabric';
 import {UtilService} from '../util.service'
 import { Subscription }   from 'rxjs/Subscription';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/throttleTime';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/filter';
+import { Observable } from 'rxjs/Observable';
+// import 'rxjs/add/observable/fromEvent';
+// import 'rxjs/add/operator/throttleTime';
+// import 'rxjs/add/operator/debounceTime';
+// import 'rxjs/add/operator/filter';
 
 declare const fabric: any;
 
@@ -139,8 +139,11 @@ export class CanvasComponent implements OnInit {
   flipSelectedImage(){
     if(this.activeObjectType === 'image'){
       this.activeObject.flipX = this.activeObject.flipX ? !this.activeObject.flipX : true;
+      this.canvas.renderAll();
     }
-    this.canvas.renderAll();
+    else{
+      this.utilService.openSnackBar("No image selected",800);
+    }
   }
 
   // ------------------------------- cropping -----------------------------------
@@ -212,36 +215,17 @@ export class CanvasComponent implements OnInit {
 
   // ------------------------------- image cloning ------------------------------ 
 
-  // clone() {
-  //   let activeObject = this.canvas.getActiveObject(),
-  //     activeGroup = this.canvas.getActiveGroup();
-
-  //   if (activeObject) {
-  //     let clone;
-  //     switch (activeObject.type) {
-  //       case 'rect':
-  //         clone = new fabric.Rect(activeObject.toObject());
-  //         break;
-  //       case 'circle':
-  //         clone = new fabric.Circle(activeObject.toObject());
-  //         break;
-  //       case 'triangle':
-  //         clone = new fabric.Triangle(activeObject.toObject());
-  //         break;
-  //       case 'i-text':
-  //         clone = new fabric.IText('', activeObject.toObject());
-  //         break;
-  //       case 'image':
-  //         clone = fabric.util.object.clone(activeObject);
-  //         break;
-  //     }
-  //     if (clone) {
-  //       clone.set({ left: 10, top: 10 });
-  //       this.canvas.add(clone);
-  //       this.selectItemAfterAdded(clone);
-  //     }
-  //   }
-  // }
+  clone() {
+    if(this.activeObjectType==='image'){
+      const clone = fabric.util.object.clone(this.activeObject); 
+      clone.set({ left: 10, top: 10 });
+      this.canvas.add(clone);
+      this.selectItemAfterAdded(clone);
+    }
+    else{
+      this.utilService.openSnackBar('No image selected',800);
+    }
+  }
 
   // ------------------------------- text -------------------------------------
 
@@ -749,6 +733,9 @@ export class CanvasComponent implements OnInit {
           case 'FLIP:X':
             this.flipSelectedImage();
             break;
+          case 'CLONE':
+            this.clone();
+            break;
           default:
             break;
         }
@@ -787,7 +774,6 @@ export class CanvasComponent implements OnInit {
       backgroundColor:'#ffffff'
     });
     fabric.textureSize = 4096;
-    console.log(fabric.textureSize);
 
     // Initializing backend
     var webglBackend = new fabric.WebglFilterBackend();

@@ -12,7 +12,7 @@
     <button matTooltip="Preview" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">zoom_in</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
-    <button matTooltip="Preview" matTooltipPosition="above" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">content_copy</i></button>
+    <button matTooltip="Clone Image" matTooltipPosition="above" (click)="canvasCommand('CLONE')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">content_copy</i></button>
   </mat-grid-tile>
   <mat-grid-tile>
     <button matTooltip="Text" matTooltipPosition="above" (click)="canvasCommand('ADD_TEXT')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">text_fields</i></button>
