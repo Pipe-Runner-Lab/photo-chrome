@@ -23,4 +23,7 @@
   <mat-grid-tile>
     <button matTooltip="Photo Filter" matTooltipPosition="above" (click)="canvasCommand('ADD_FILTER')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">format_paint</i></button>
   </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Photo Filter" matTooltipPosition="above" (click)="canvasCommand('DOWNLOAD_CURRENT_CANVAS')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">save</i></button>
+  </mat-grid-tile>
 </mat-grid-list>

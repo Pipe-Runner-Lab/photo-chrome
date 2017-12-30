@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MatButtonModule,MatIconModule,MatGridListModule,MatSliderModule,MatTooltipModule,MatSelectModule,MatSnackBarModule} from '@angular/material';
+import {MatButtonModule,MatIconModule,MatGridListModule,MatSliderModule,MatTooltipModule,MatSelectModule,MatSnackBarModule,MatMenuModule} from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'ngx-color-picker';
 
@@ -27,7 +27,8 @@ import { CropToolsComponent } from './toolbar/crop-tools/crop-tools.component'
     ColorPickerModule,
     MatTooltipModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatMenuModule
   ],
   declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent, MainToolsComponent, FilterToolsComponent, TextToolsComponent, CropToolsComponent],
   exports:[ImageEditorComponent],

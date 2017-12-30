@@ -69,4 +69,11 @@ export class UtilService {
   openSnackBar = (message,duration) => {
     this.openSnackBarSource.next({message,duration});
   }
+
+  //------------------------ change canvas size ---------------------------------
+  private changeCanvasSizeSource = new Subject<any>();
+  changeCanvasSize$ = this.changeCanvasSizeSource.asObservable();
+  changeCanvasSize = (orientation, aspectRatio) => {
+    this.changeCanvasSizeSource.next({ orientation, aspectRatio });
+  }
 }

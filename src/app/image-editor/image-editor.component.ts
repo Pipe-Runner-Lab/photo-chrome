@@ -10,14 +10,12 @@ import { UtilService } from './util.service';
   styleUrls: ['./image-editor.component.css']
 })
 export class ImageEditorComponent implements OnInit {
-
   // ------------------------------- subscribtion ------------------------------
   private openSnackBarSubscription:Subscription;
   
   constructor( private utilService: UtilService, private snackBar: MatSnackBar ) { 
     this.openSnackBarSubscription = utilService.openSnackBar$.subscribe(
       (({message,duration})=>{
-        console.log(message,duration);
         this.snackBar.open(message,undefined,{
           duration: duration
         });

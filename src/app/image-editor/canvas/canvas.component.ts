@@ -69,10 +69,6 @@ export class CanvasComponent implements OnInit {
     height: Math.round(window.innerHeight - this.screenReductionFactor),
     width: Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[3]),
   };
-  // private oldSize: any = {
-  //   height:this.size.height,
-  //   width:this.size.width,
-  // }
 
   // private json: any;
   // private selected: any;
@@ -86,6 +82,7 @@ export class CanvasComponent implements OnInit {
   private onUpdateTextSubscription:Subscription;
   private onSelectionModifiedSubscription:Subscription;
   private canvasCommandSubscription:Subscription;
+  private changeCanvasSizeSubscription:Subscription;
 
   // ------------------------------- image -------------------------------------- 
 
@@ -147,6 +144,7 @@ export class CanvasComponent implements OnInit {
   }
 
   // ------------------------------- cropping -----------------------------------
+  
   startCrop(){
     console.log('cropping started');
     this.cleanSelect();
@@ -310,10 +308,7 @@ export class CanvasComponent implements OnInit {
   }
 
   // ------------------------------- utility ----------------------------------
-  // resizeAllObjects(){
-  //   console.log('resize initiated');
-  // }
-  
+
   getActiveFilter(imageObject){
     let activeFilter = {
       brightness:0,
@@ -553,6 +548,18 @@ export class CanvasComponent implements OnInit {
     }
   }
 
+  downloadCurrentCanvas(){
+    const multiplier = 1080/this.size.height;
+    console.log(multiplier);
+    const url = this.canvas.toDataURL({
+      format: 'jpeg',
+      quality: 1,
+      multiplier: multiplier
+    })
+
+    window.open(url);
+  }
+
   // ------------------------- Canvas Event Handlers --------------------------
 
   onObjectSelected():void{
@@ -697,6 +704,7 @@ export class CanvasComponent implements OnInit {
             break;
           case 'FILTER:ALL':
             this.cleanSelect();
+            this.toolType='FILTER:ALL';
             this.utilService.changeToolType('FILTER:ALL',this.globalFilterValues);
             break;
           case 'ADD_TEXT':
@@ -706,8 +714,11 @@ export class CanvasComponent implements OnInit {
             this.cleanSelect();
             break;
           case 'BACK_TO_MAIN_MENU':
-            if(this.activeObjectType!=='image'){
+            if(this.activeObjectType!=='image' && this.toolType !== 'FILTER:ALL'){
               this.cleanSelect();
+            }
+            else{
+              this.toolType = 'MAIN';
             }
             break;
           case 'DELETE':
@@ -736,11 +747,32 @@ export class CanvasComponent implements OnInit {
           case 'CLONE':
             this.clone();
             break;
+          case 'DOWNLOAD_CURRENT_CANVAS':
+            this.downloadCurrentCanvas();
+            break;
           default:
             break;
         }
       }
     )
+
+    this.changeCanvasSizeSubscription = utilService.changeCanvasSize$.subscribe(
+      ({ orientation, aspectRatio })=>{
+        console.log(orientation,aspectRatio);
+
+        if(orientation === 'LANDSCAPE'){
+          this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
+          this.size.width = Math.round((window.innerHeight - this.screenReductionFactor) * this.aspectRatioList[aspectRatio])
+        }
+        else{
+          this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
+          this.size.width = Math.round((window.innerHeight - this.screenReductionFactor) * Math.pow(this.aspectRatioList[aspectRatio],-1));
+        }
+
+        this.canvas.setWidth(this.size.width);
+        this.canvas.setHeight(this.size.height);
+      }
+    );
 
     // this.windowResizeSubscription = Observable.fromEvent(window,'resize').filter(()=>(window.innerHeight>720)).throttleTime(100).subscribe(
     //   ()=>{

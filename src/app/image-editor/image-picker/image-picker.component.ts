@@ -13,6 +13,8 @@ export class ImagePickerComponent implements OnInit {
   private fileUrlList: string[] = [];
   private loadingFiles: boolean;  //add loader while files is being loaded
   private selection:any;
+  private index: number;
+  private orientation: string; 
 
   // ---------------------------- Subscription ------------------------------
   private onSelectionCreatedSubscription:Subscription;
@@ -51,6 +53,16 @@ export class ImagePickerComponent implements OnInit {
     this.utilService.addImageToCanvas(url);
   }
 
+  changeAspectRatio(index: number){
+    this.index = index;
+    this.utilService.changeCanvasSize(this.orientation,index);
+  }
+  
+  changeOrientation(orientation: string){
+    this.orientation = orientation;
+    this.utilService.changeCanvasSize(orientation,this.index);
+  }
+
   constructor(private utilService: UtilService ) {
     this.selection = undefined;
     this.onSelectionCreatedSubscription = utilService.onSelectionCreated$.subscribe(
@@ -58,6 +70,9 @@ export class ImagePickerComponent implements OnInit {
         this.selection = selection;
       }
     )
+
+    this.index = 1;
+    this.orientation = 'LANDSCAPE';
    }
 
   ngOnInit() {

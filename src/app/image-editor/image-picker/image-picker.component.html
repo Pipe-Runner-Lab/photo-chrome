@@ -3,7 +3,30 @@
     <button mat-icon-button id='upload-file-button' (click)="onUploadButtonTrigger()"> <i class="material-icons icons">add_a_photo</i>
       <input type="file" id="upload-file-input" style="display:none;" multiple accept="image/*" (change)="onUpload($event)"/>
     </button>
-    <button mat-icon-button><i class="material-icons icons">photo_size_select_small</i></button>
+    <button mat-icon-button [matMenuTriggerFor]="aspectratiomenu"><i class="material-icons icons">photo_size_select_small</i></button>
+    <mat-menu #aspectratiomenu="matMenu">
+      <button mat-menu-item (click)="changeAspectRatio(0)">
+        <span>6x4</span>
+      </button>
+      <button mat-menu-item (click)="changeAspectRatio(1)">
+        <span>7x5</span>
+      </button>
+      <button mat-menu-item (click)="changeAspectRatio(2)">
+        <span>8x6</span>
+      </button>
+      <button mat-menu-item (click)="changeAspectRatio(3)">
+        <span>6x6</span>
+      </button>
+    </mat-menu>
+    <button mat-icon-button [matMenuTriggerFor]="orientationmenu"><i class="material-icons icons">screen_rotation</i></button>
+    <mat-menu #orientationmenu="matMenu">
+      <button mat-menu-item (click)="changeOrientation('LANDSCAPE')">
+        <span>Landscape</span>
+      </button>
+      <button mat-menu-item (click)="changeOrientation('PORTRAIT')">
+        <span>Portrait</span>
+      </button>
+    </mat-menu>
     <div class="spacer"></div>
     <button mat-icon-button (click)="onRemoveObjectFromCanvas()" *ngIf="selection!==undefined" ng color="warn"><i class="material-icons">delete_forever</i></button>
     <button mat-icon-button (click)="onClearAll()"><i class="material-icons icons">clear</i></button>
