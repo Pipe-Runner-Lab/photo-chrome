@@ -15,7 +15,7 @@ export class MainToolsComponent implements OnInit {
   }
 
   canvasCommand(toolType:string):void{
-    this.utilService.canvasCommand(toolType);
+    this.utilService.canvasCommand(toolType,{});
   }
 
   constructor(private utilService: UtilService) { }

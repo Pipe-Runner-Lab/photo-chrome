@@ -14,5 +14,6 @@
     <app-text-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='TEXT' || selectedToolType==='TEXT:EDITING'"></app-text-tools>
     <app-filter-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='FILTER:ALL' || selectedToolType==='FILTER:SINGLE'"></app-filter-tools>
     <app-crop-tools [selectedToolType]="selectedToolType" *ngIf="selectedToolType==='CROP'"></app-crop-tools>
+    <app-shape-mask-tools [selectedToolType]="selectedToolType" [activeObjectProps]="activeObjectProps" *ngIf="selectedToolType==='SHAPE_MASK'"></app-shape-mask-tools>
   </div>
 </div>

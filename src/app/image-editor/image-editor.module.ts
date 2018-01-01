@@ -14,7 +14,8 @@ import { UtilService } from './util.service';
 import { MainToolsComponent } from './toolbar/main-tools/main-tools.component';
 import { FilterToolsComponent } from './toolbar/filter-tools/filter-tools.component';
 import { TextToolsComponent } from './toolbar/text-tools/text-tools.component';
-import { CropToolsComponent } from './toolbar/crop-tools/crop-tools.component'
+import { CropToolsComponent } from './toolbar/crop-tools/crop-tools.component';
+import { ShapeMaskToolsComponent } from './toolbar/shape-mask-tools/shape-mask-tools.component'
 
 @NgModule({
   imports: [
@@ -30,7 +31,7 @@ import { CropToolsComponent } from './toolbar/crop-tools/crop-tools.component'
     MatSnackBarModule,
     MatMenuModule
   ],
-  declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent, MainToolsComponent, FilterToolsComponent, TextToolsComponent, CropToolsComponent],
+  declarations: [CanvasComponent, ImageEditorComponent, ToolbarComponent, ImagePickerComponent, MenubarComponent, MainToolsComponent, FilterToolsComponent, TextToolsComponent, CropToolsComponent, ShapeMaskToolsComponent],
   exports:[ImageEditorComponent],
   providers:[UtilService]
 })

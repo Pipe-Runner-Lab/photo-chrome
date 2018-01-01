@@ -22,7 +22,7 @@ export class FilterToolsComponent implements OnInit {
   toggleScope(filterScope){
     this.filterScope = filterScope;
     if(this.filterScope === 'ALL'){
-      this.utilService.canvasCommand('FILTER:ALL');
+      this.utilService.canvasCommand('FILTER:ALL',{});
     }
   }
 

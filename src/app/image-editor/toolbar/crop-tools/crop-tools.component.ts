@@ -11,11 +11,11 @@ export class CropToolsComponent implements OnInit {
   @Input() selectedToolType;
 
   onCropCancel(){
-    this.utilService.canvasCommand('STOP_CROP');
+    this.utilService.canvasCommand('STOP_CROP',{});
   }
 
   onCropFinish(){
-    this.utilService.canvasCommand('FINISH_CROP');
+    this.utilService.canvasCommand('FINISH_CROP',{});
   }
 
   constructor(private utilService:UtilService) { }

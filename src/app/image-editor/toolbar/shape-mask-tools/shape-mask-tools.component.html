@@ -1,0 +1,64 @@
+<!-- shape type -->
+<mat-grid-list class="style-container" cols="3" rowHeight="48px">
+  <mat-grid-tile>
+    <button matTooltip="Add Rectangle Mask" matTooltipPosition="above" mat-icon-button (click)="addShapeMask('RECTANGLE')"><i class="material-icons icons">crop_landscape</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Add Circle Mask" matTooltipPosition="above" mat-icon-button (click)="addShapeMask('CIRCLE')"><i class="material-icons icons">panorama_fish_eye</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Add Triangle Mask" matTooltipPosition="above" mat-icon-button (click)="addShapeMask('TRIANGLE')"><i class="material-icons icons">details</i></button>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<!-- color and opacity picker -->
+<div class="picker-container" style="margin:12px 0px 0px 0px;">
+  <button matTooltip="Color Picker" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button [(colorPicker)]="color"
+    (colorPickerChange)="onUpdateShapeMask()" [cpWidth]="196" [cpDisableInput]="true" [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
+    [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
+  <i [style.color]="color " class="material-icons icons">color_lens</i>
+  </button>
+  <div class="slider-wrapper">
+    <mat-slider min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="opacity" (change)="onUpdateShapeMask()" class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- shadow amount picker -->
+<div class="picker-container">
+  <div matTooltip="Shadow Amount" matTooltipPosition="above" class="non-interactive-icon-wrapper">
+    <i class="material-icons icons">layers</i>
+  </div>
+  <div class="slider-wrapper">
+    <mat-slider min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="shadowAmount" (change)="onUpdateShapeMask()" class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- shadow blur picker -->
+<div class="picker-container">
+  <div matTooltip="Shadow Blur" matTooltipPosition="above" class="non-interactive-icon-wrapper">
+    <i class="material-icons icons">grain</i>
+  </div>
+  <div class="slider-wrapper">
+    <mat-slider min="0" step="1" max="20" thumb-label="true" [(ngModel)]="shadowBlur" (change)="onUpdateShapeMask()" class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- shadow offsetX picker -->
+<div class="picker-container">
+  <div matTooltip="Shadow Offset X" matTooltipPosition="above" class="non-interactive-icon-wrapper">
+    <i class="material-icons icons">border_bottom</i>
+  </div>
+  <div class="slider-wrapper">
+    <mat-slider min="-20" step="1" max="20" thumb-label="true" [(ngModel)]="shadowOffsetX" (change)="onUpdateShapeMask()" class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- shadow offsetY picker -->
+<div class="picker-container">
+  <div matTooltip="Shadow Offset Y" matTooltipPosition="above" class="non-interactive-icon-wrapper">
+    <i class="material-icons icons">border_right</i>
+  </div>
+  <div class="slider-wrapper">
+    <mat-slider min="-20" step="0.8" max="20" thumb-label="true" [(ngModel)]="shadowOffsetY" (change)="onUpdateShapeMask()" class="slider"></mat-slider>
+  </div>
+</div>

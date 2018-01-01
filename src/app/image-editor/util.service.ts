@@ -18,19 +18,20 @@ export class UtilService {
     this.addImageFilterSource.next({filterScope,filterProps})
   }
 
-  // --------------------- Add Text to Canvas -------------------------------
-  private addTextToCanvasSource = new Subject<any>();
-  addTextToCanvas$ = this.addTextToCanvasSource.asObservable();
-  addTextToCanvas = (textObj) => {
-    this.addTextToCanvasSource.next(textObj)
-  }
-
   // --------------------- Edit Text ----------------------------------------
   private onUpdateTextSource = new Subject<any>();
   onUpdateText$ = this.onUpdateTextSource.asObservable();
   onUpdateText = (textProps) => {
     this.onUpdateTextSource.next(textProps);
   }
+
+  // ---------------------- Edit shape mask ---------------------------------
+  private onUpdateShapeMaskSource = new Subject<any>();
+  onUpdateShapeMask$ = this.onUpdateShapeMaskSource.asObservable();
+  onUpdateShapeMask = (shapeMaskProps) => {
+    this.onUpdateShapeMaskSource.next(shapeMaskProps);
+  }
+
 
   // --------------------- On Change Tool type ------------------------------
   private changeToolTypeSource = new Subject<any>();
@@ -59,8 +60,8 @@ export class UtilService {
   //------------------------ canvas command -----------------------------------
   private canvasCommandSource = new Subject<any>();
   canvasCommand$ = this.canvasCommandSource.asObservable();
-  canvasCommand = (toolType) => {
-    this.canvasCommandSource.next(toolType);
+  canvasCommand = (toolType,option) => {
+    this.canvasCommandSource.next({toolType,option});
   }
 
   //------------------------ open snackbar -------------------------------------

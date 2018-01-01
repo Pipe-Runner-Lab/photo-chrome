@@ -78,8 +78,8 @@ export class CanvasComponent implements OnInit {
   // private objectResizeSubscription:Subscription;
   private addImageSubscription:Subscription;
   private addImageFilterSubscription:Subscription;
-  private addTextSubscription:Subscription;
   private onUpdateTextSubscription:Subscription;
+  private onUpdateShapeMaskSubscription:Subscription;
   private onSelectionModifiedSubscription:Subscription;
   private canvasCommandSubscription:Subscription;
   private changeCanvasSizeSubscription:Subscription;
@@ -307,6 +307,82 @@ export class CanvasComponent implements OnInit {
     this.canvas.renderAll();
   }
 
+  // ------------------------------- shape mask -------------------------------
+
+  addShapeMask(shapeMaskProps){
+    let shapeToAdd;
+    switch (shapeMaskProps.shape) {
+      case 'RECTANGLE':
+        shapeToAdd = new fabric.Rect({
+          top: 25,
+          left: 25,
+          height: 100,
+          width: 100,
+          fill: shapeMaskProps.color,
+          opacity: shapeMaskProps.opacity
+        });
+        break;
+      case 'TRIANGLE':
+        shapeToAdd = new fabric.Triangle({
+          top: 25,
+          left: 25,
+          height: 100,
+          width: 100,
+          fill: shapeMaskProps.color,
+          opacity: shapeMaskProps.opacity
+        });
+        break;
+      case 'CIRCLE':
+        shapeToAdd = new fabric.Circle({
+          top: 25,
+          left: 25,
+          radius: 50,
+          fill: shapeMaskProps.color,
+          opacity: shapeMaskProps.opacity
+        });
+        break;
+      default:
+        break;
+    }
+
+    shapeToAdd.setShadow({
+      color: `rgba(0,0,0,${shapeMaskProps.shadowAmount})`,
+      blur: shapeMaskProps.shadowBlur,
+      offsetX: shapeMaskProps.shadowOffsetX,
+      offsetY: shapeMaskProps.shadowOffsetY
+    });
+    this.canvas.add(shapeToAdd);
+    this.selectItemAfterAdded(shapeToAdd);   
+  }
+
+  onSelectShapeMask(){
+    if(this.activeObject){
+      console.log(this.activeObject.shadow);
+      this.utilService.changeToolType('SHAPE_MASK',{
+        color: this.activeObject.fill,
+        opacity: this.activeObject.opacity,
+        shadowAmount: this.activeObject.shadow.color.split(',')[3].split(')')[0],
+        shadowBlur: this.activeObject.shadow.blur,
+        shadowOffsetX: this.activeObject.shadow.offsetX,
+        shadowOffsetY: this.activeObject.shadow.offsetY
+      });
+    }
+  }
+
+  onUpdateShapeMask(shapeMaskProps){
+    if(this.activeObject && this.activeObjectType === 'shape-mask'){
+      this.activeObject.set('fill',shapeMaskProps.color);
+      this.activeObject.set('opacity',shapeMaskProps.opacity);
+      this.activeObject.setShadow({
+        color: `rgba(0,0,0,${shapeMaskProps.shadowAmount})`,
+        blur: shapeMaskProps.shadowBlur,
+        offsetX: shapeMaskProps.shadowOffsetX,
+        offsetY: shapeMaskProps.shadowOffsetY
+      });
+      this.canvas.renderAll();
+    }
+  }
+
   // ------------------------------- utility ----------------------------------
 
   getActiveFilter(imageObject){
@@ -490,6 +566,23 @@ export class CanvasComponent implements OnInit {
             type:'i-text',
             activeObject: activeObject
           };
+        case 'rect':
+          if(this.croppingWindow === undefined){
+            return {
+              type:'shape-mask',
+              activeObject: activeObject
+            }
+          }
+        case 'triangle':
+          return {
+            type:'shape-mask',
+            activeObject: activeObject
+          }
+        case 'circle':
+          return {
+            type:'shape-mask',
+            activeObject: activeObject
+          }
         default:
           return {
             type:'UNKNOWN'
@@ -579,12 +672,15 @@ export class CanvasComponent implements OnInit {
           this.onSelectText(this.activeObject);
           break;
         case 'image':
-          // this.toolType = 'FILTER'
           if(this.toolType === 'FILTER:ALL'){
             this.toolType = 'FILTER:SINGLE';
             this.onSelectImage(this.activeObject)
           }
-          break;        
+          break; 
+        case 'shape-mask':
+          this.toolType = 'SHAPE_MASK';
+          this.onSelectShapeMask();
+          break;
         default:
           break;
       }
@@ -652,12 +748,6 @@ export class CanvasComponent implements OnInit {
         this.addImageOnCanvas(url);
       }
     )
-
-    this.addTextSubscription = utilService.addTextToCanvas$.subscribe(
-      textProps => {
-        this.onAddText();
-      }
-    )
     
     this.addImageFilterSubscription = utilService.addImageFilter$.subscribe(
       ({filterScope,filterProps})=>{
@@ -689,8 +779,14 @@ export class CanvasComponent implements OnInit {
       }
     )
 
+    this.onUpdateShapeMaskSubscription = utilService.onUpdateShapeMask$.subscribe(
+      (shapeMaskProps)=>{
+        this.onUpdateShapeMask(shapeMaskProps);
+      }
+    );
+
     this.canvasCommandSubscription = utilService.canvasCommand$.subscribe(
-      (toolType) => {
+      ({toolType,option}) => {
         switch (toolType) {
           case 'ADD_FILTER':
             if(this.activeObjectType==='image'){
@@ -747,6 +843,9 @@ export class CanvasComponent implements OnInit {
           case 'CLONE':
             this.clone();
             break;
+          case 'ADD_SHAPE_MASK':
+            this.addShapeMask(option);
+            break;
           case 'DOWNLOAD_CURRENT_CANVAS':
             this.downloadCurrentCanvas();
             break;
@@ -758,7 +857,6 @@ export class CanvasComponent implements OnInit {
 
     this.changeCanvasSizeSubscription = utilService.changeCanvasSize$.subscribe(
       ({ orientation, aspectRatio })=>{
-        console.log(orientation,aspectRatio);
 
         if(orientation === 'LANDSCAPE'){
           this.size.height = Math.round(window.innerHeight - this.screenReductionFactor);
@@ -859,8 +957,8 @@ export class CanvasComponent implements OnInit {
     // this.objectResizeSubscription.unsubscribe();
     this.addImageSubscription.unsubscribe();
     this.addImageFilterSubscription.unsubscribe();
-    this.addTextSubscription.unsubscribe();
     this.onUpdateTextSubscription.unsubscribe();
+    this.onUpdateShapeMaskSubscription.unsubscribe();
     this.canvasCommandSubscription.unsubscribe();
   }
 

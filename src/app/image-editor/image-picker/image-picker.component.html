@@ -6,16 +6,16 @@
     <button mat-icon-button [matMenuTriggerFor]="aspectratiomenu"><i class="material-icons icons">photo_size_select_small</i></button>
     <mat-menu #aspectratiomenu="matMenu">
       <button mat-menu-item (click)="changeAspectRatio(0)">
-        <span>6x4</span>
+        <span>6x6</span>
       </button>
       <button mat-menu-item (click)="changeAspectRatio(1)">
-        <span>7x5</span>
-      </button>
-      <button mat-menu-item (click)="changeAspectRatio(2)">
         <span>8x6</span>
       </button>
+      <button mat-menu-item (click)="changeAspectRatio(2)">
+        <span>7x5</span>
+      </button>
       <button mat-menu-item (click)="changeAspectRatio(3)">
-        <span>6x6</span>
+        <span>6x4</span>
       </button>
     </mat-menu>
     <button mat-icon-button [matMenuTriggerFor]="orientationmenu"><i class="material-icons icons">screen_rotation</i></button>

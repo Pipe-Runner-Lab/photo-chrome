@@ -106,7 +106,7 @@ export class TextToolsComponent implements OnInit {
   }
 
   ngOnChanges(){
-    if(this.activeObjectProps && this.selectedToolType === 'TEXT'){
+    if( this.activeObjectProps && this.selectedToolType === 'TEXT' ){
       this.color = this.activeObjectProps.color;
       this.opacity = this.activeObjectProps.opacity;
       this.fontFamily = this.activeObjectProps.fontFamily;
@@ -119,7 +119,7 @@ export class TextToolsComponent implements OnInit {
       this.lineHeight = this.activeObjectProps.lineHeight;
       this.charSpacing = this.activeObjectProps.charSpacing;
     }
-    else if( this.selectedToolType === 'TEXT:EDITING' ){
+    else if( this.activeObjectProps && this.selectedToolType === 'TEXT:EDITING' ){
       
       this.color = this.activeObjectProps['fill'] || '#7F7F7F';
       this.fontFamily = this.activeObjectProps['fontFamily'] || 'Roboto';

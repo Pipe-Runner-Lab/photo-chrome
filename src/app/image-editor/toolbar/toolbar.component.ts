@@ -19,6 +19,7 @@ export class ToolbarComponent implements OnInit {
     'PREVIEW',
     'FILTER:ALL',
     'FILTER:SINGLE',
+    'SHAPE_MASK',
     'DEACTIVATE'
   ];
   private selectedToolType:string;
@@ -35,21 +36,21 @@ export class ToolbarComponent implements OnInit {
   }
 
   cleanSelect(){
-    this.utilService.canvasCommand('CLEAN_SELECT');
+    this.utilService.canvasCommand('CLEAN_SELECT',{});
     this.onChangeToolType('MAIN');
   }
 
   backToMainMenu(){
-    this.utilService.canvasCommand('BACK_TO_MAIN_MENU');
+    this.utilService.canvasCommand('BACK_TO_MAIN_MENU',{});
     this.onChangeToolType('MAIN');
   }
 
   bringForward(){
-    this.utilService.canvasCommand('BRING_FORWARD');
+    this.utilService.canvasCommand('BRING_FORWARD',{});
   }
 
   sendBackward(){
-    this.utilService.canvasCommand('SEND_BACKWARD');
+    this.utilService.canvasCommand('SEND_BACKWARD',{});
   }
 
   constructor(private utilService:UtilService) {
