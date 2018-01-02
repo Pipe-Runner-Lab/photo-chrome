@@ -573,6 +573,12 @@ export class CanvasComponent implements OnInit {
               activeObject: activeObject
             }
           }
+          else{
+            return {
+              type:'cropping-window',
+              activeObject: activeObject
+            }
+          }
         case 'triangle':
           return {
             type:'shape-mask',
