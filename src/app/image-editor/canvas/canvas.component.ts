@@ -383,6 +383,22 @@ export class CanvasComponent implements OnInit {
     }
   }
 
+  // ------------------------------- Pen --------------------------------------
+
+  startPenMode(){
+    this.canvas.isDrawingMode = true;
+    this.canvas.forEachObject((object)=>{
+      // keep the drawing objects selectable
+      object.selectable = false;
+    })
+    this.cleanSelect();
+    this.utilService.changeToolType('PEN',{});
+  }
+
+  stopPenMode(){
+    this.canvas.isDrawingMode = false;
+  }
+
   // ------------------------------- utility ----------------------------------
 
   getActiveFilter(imageObject){
@@ -816,12 +832,15 @@ export class CanvasComponent implements OnInit {
             this.cleanSelect();
             break;
           case 'BACK_TO_MAIN_MENU':
+            // turn off drawing mode
+            this.stopPenMode();           
+            
+            // if object type is image and in filter single mode, don't clear selection
             if(this.activeObjectType!=='image' && this.toolType !== 'FILTER:ALL'){
               this.cleanSelect();
-            }
-            else{
-              this.toolType = 'MAIN';
-            }
+            }            
+            
+            this.toolType = 'MAIN';
             break;
           case 'DELETE':
             this.removeSelection();
@@ -854,6 +873,9 @@ export class CanvasComponent implements OnInit {
             break;
           case 'DOWNLOAD_CURRENT_CANVAS':
             this.downloadCurrentCanvas();
+            break;
+          case 'PEN':
+            this.startPenMode();
             break;
           default:
             break;

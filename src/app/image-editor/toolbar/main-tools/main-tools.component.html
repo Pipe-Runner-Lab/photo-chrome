@@ -30,4 +30,7 @@
   <mat-grid-tile>
     <button matTooltip="Shape Mask" matTooltipPosition="above" (click)="onChangeToolType('SHAPE_MASK')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">filter_b_and_w</i></button>
   </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Pen" matTooltipPosition="above" (click)="canvasCommand('PEN')" mat-icon-button [disabled]="selectedToolType==='DEACTIVATE'"><i class="material-icons" [ngClass]="{'icons':selectedToolType!=='DEACTIVATE'}">mode_edit</i></button>
+  </mat-grid-tile>
 </mat-grid-list>

@@ -1,0 +1,64 @@
+<!-- text align -->
+<mat-grid-list *ngIf="selectedToolType!=='TEXT:EDITING'" class="style-container" cols="4" rowHeight="48px">
+  <mat-grid-tile>
+    <button matTooltip="Pencil" matTooltipPosition="above" mat-icon-button (click)="setBrushType('left')"><i [ngClass]="{'active-icon':brushType==='left'}" class="material-icons icons">border_color</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Circle" matTooltipPosition="above" mat-icon-button (click)="setBrushType('center')"><i [ngClass]="{'active-icon':brushType==='center'}" class="material-icons icons">bubble_chart</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Spray" matTooltipPosition="above" mat-icon-button (click)="setBrushType('right')"><i [ngClass]="{'active-icon':brushType==='right'}" class="material-icons icons">blur_on</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Circle Pattern" matTooltipPosition="above" mat-icon-button (click)="setBrushType('justify')"><i [ngClass]="{'active-icon':brushType==='justify'}" class="material-icons icons">grain</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Horizontal Pattern" matTooltipPosition="above" mat-icon-button (click)="setBrushType('left')"><i [ngClass]="{'active-icon':brushType==='left'}" class="material-icons icons">border_horizontal</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Vertical Pattern" matTooltipPosition="above" mat-icon-button (click)="setBrushType('center')"><i [ngClass]="{'active-icon':brushType==='center'}" class="material-icons icons">border_vertical</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Square Pattern" matTooltipPosition="above" mat-icon-button (click)="setBrushType('right')"><i [ngClass]="{'active-icon':brushType==='right'}" class="material-icons icons">view_comfy</i></button>
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <button matTooltip="Diamond Pattern" matTooltipPosition="above" mat-icon-button (click)="setBrushType('justify')"><i [ngClass]="{'active-icon':brushType==='justify'}" class="material-icons icons">texture</i></button>
+  </mat-grid-tile>
+</mat-grid-list>>
+
+<!-- color and opacity picker -->
+<div class="picker-container" style="margin:12px 0px 0px 0px;">
+  <button matTooltip="Color Picker" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button [(colorPicker)]="color"
+    (colorPickerChange)="onUpdateText()" [cpWidth]="196" [cpDisableInput]="true" [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
+    [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
+  <i [style.color]="color " class="material-icons icons">color_lens</i>
+  </button>
+  <div class="slider-wrapper">
+    <mat-slider *ngIf="selectedToolType!=='TEXT:EDITING'" min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="opacity"
+      (change)="onUpdateText()" class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- shadow color and shadow amount picker -->
+<div class="picker-container" style="margin:12px 0px 0px 0px;">
+  <button matTooltip="Shadow color Picker" matTooltipPosition="above" [disabled]="isSelectionInactive" mat-icon-button [(colorPicker)]="color"
+    (colorPickerChange)="onUpdateText()" [cpWidth]="196" [cpDisableInput]="true" [cpPosition]="'bottom'" [cpPositionOffset]="'50%'"
+    [cpPositionRelativeToArrow]="true" [cpSaveClickOutside]="true">
+  <i [style.color]="color " class="material-icons icons">layers</i>
+  </button>
+  <div class="slider-wrapper">
+    <mat-slider *ngIf="selectedToolType!=='TEXT:EDITING'" min="0" step="0.1" max="1" thumb-label="true" [(ngModel)]="opacity"
+      (change)="onUpdateText()" class="slider"></mat-slider>
+  </div>
+</div>
+
+<!-- brush size -->
+<div class="picker-container">
+  <div matTooltip="Font Size" matTooltipPosition="above" class="font-size-text">
+    {{fontSize}}
+  </div>
+  <div class="slider-wrapper">
+    <mat-slider [disabled]="isSelectionInactive" min="8" step="1" max="100" thumb-label="true" [(ngModel)]="fontSize" (change)="onUpdateText()"
+      class="slider "></mat-slider>
+  </div>
+</div>

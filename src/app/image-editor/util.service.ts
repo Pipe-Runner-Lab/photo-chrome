@@ -32,6 +32,13 @@ export class UtilService {
     this.onUpdateShapeMaskSource.next(shapeMaskProps);
   }
 
+    //------------------------ Edit brush props ------------------------------
+    private onChangeBrushSource = new Subject<any>();
+    onChangeBrush$ = this.onChangeBrushSource.asObservable();
+    onChangeBrush = (brushProps) => {
+      this.onChangeBrushSource.next(brushProps);
+    }
+
 
   // --------------------- On Change Tool type ------------------------------
   private changeToolTypeSource = new Subject<any>();

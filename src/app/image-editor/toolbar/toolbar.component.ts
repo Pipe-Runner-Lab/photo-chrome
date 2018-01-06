@@ -20,6 +20,7 @@ export class ToolbarComponent implements OnInit {
     'FILTER:ALL',
     'FILTER:SINGLE',
     'SHAPE_MASK',
+    'PEN',
     'DEACTIVATE'
   ];
   private selectedToolType:string;
