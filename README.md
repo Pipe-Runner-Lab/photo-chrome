@@ -46,7 +46,7 @@ This flip tool can be used to flip an __image__ horizontally. An option to flip 
 The filter tool fancies a set of preset filters for casual users, and a set of advanced tools for power users. The filter tool has two modes - single, global. When an image is in selection, the filter mode is automatically turned on to single and any changes will be applied to the __selected image only__. When no image is selected and filter tool is used, the global mode is used and the filters values are applied to __all the images objects__ present on the canvas.
   
 ![Cropping window sample](./image_sample/filter_preset.png)
-This preset filters are:
+The preset filters are:
 
 * Sharper
 * Emboss
@@ -56,7 +56,7 @@ This preset filters are:
 * Polaroid
 
 ![Cropping window sample](./image_sample/filter_advanced.png)
-This advanced filters are:
+The advanced filters are:
 
 * Brightness
 * Contrast
